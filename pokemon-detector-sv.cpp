@@ -17,12 +17,14 @@ pokemon_detector_sv_create(const struct pokemon_detector_sv_config config) {
   return new pokemon_detector_sv_context(config);
 }
 
-extern "C" void pokemon_detector_sv_destroy(struct pokemon_detector_sv_context *context) {
+extern "C" void
+pokemon_detector_sv_destroy(struct pokemon_detector_sv_context *context) {
   delete context;
 }
 
-extern "C" void pokemon_detector_sv_load_screen(
-    struct pokemon_detector_sv_context *context, unsigned char *buf_bgra) {
+extern "C" void
+pokemon_detector_sv_load_screen(struct pokemon_detector_sv_context *context,
+                                unsigned char *buf_bgra) {
   auto &config = context->config;
   context->screenBGRA =
       cv::Mat(config.screen_height, config.screen_width, CV_8UC4, buf_bgra);
@@ -37,20 +39,21 @@ extern "C" void pokemon_detector_sv_crop_opponent_pokemons(
                              config.opponent_col_range[1]),
         rowRange(config.opponent_row_range[i][0],
                  config.opponent_row_range[i][1]);
-    auto &pokemonImage = context->opponentPokemonImages[i];
-    pokemonImage = image(rowRange, colRange);
+    auto &pokemonImageBGRA = context->opponentPokemonImages[i];
+    pokemonImageBGRA = image(rowRange, colRange);
 
-    cv::Mat mask;
+    cv::Mat pokemonImageBGR, mask;
+    cv::cvtColor(pokemonImageBGRA, pokemonImageBGR, cv::COLOR_BGRA2BGR);
     cv::Point seedPoint(0, 0);
-    cv::floodFill(pokemonImage, mask, seedPoint, 0, 0, 0, 0,
+    cv::floodFill(pokemonImageBGR, mask, seedPoint, 0, 0, 0, 0,
                   cv::FLOODFILL_MASK_ONLY);
 
     auto &pokemonMask = context->opponentPokemonMasks[i];
     cv::Range cropCol(1, mask.cols - 1), cropRow(1, mask.rows - 1);
     pokemonMask = 1 - mask(cropCol, cropRow);
-    for (int x = 0; x < pokemonImage.cols; x++) {
-      for (int y = 0; y < pokemonImage.rows; y++) {
-        pokemonImage.at<cv::Vec4b>(y, x)[3] =
+    for (int x = 0; x < pokemonImageBGRA.cols; x++) {
+      for (int y = 0; y < pokemonImageBGRA.rows; y++) {
+        pokemonImageBGRA.at<cv::Vec4b>(y, x)[3] =
             pokemonMask.at<unsigned char>(y, x) * 255;
       }
     }
