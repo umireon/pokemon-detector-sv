@@ -143,9 +143,11 @@ endif(APPLE)
 
 add_dependencies(OpenCV OpenCVDownload)
 
-add_library(pokemon-detector-sv pokemon-detector-sv.cpp pokemon-detector-sv.h)
+add_library(pokemon-detector-sv STATIC)
+target_sources(pokemon-detector-sv PRIVATE pokemon-detector-sv.cpp PUBLIC FILE_SET
+        HEADERS BASE_DIRS ${PROJECT_SOURCE_DIR} FILES pokemon-detector-sv.h)
 target_link_libraries(pokemon-detector-sv OpenCV)
 add_executable(pokemon-detector-sv-exe main.cpp)
 target_link_libraries(pokemon-detector-sv-exe OpenCV)
 
-install(TARGETS pokemon-detector-sv)
+install(TARGETS pokemon-detector-sv FILE_SET HEADERS)
