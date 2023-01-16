@@ -1,5 +1,6 @@
 #include "pokemon-detector-sv.h"
 #include <opencv2/opencv.hpp>
+#include <filesystem>
 
 extern "C" struct pokemon_detector_sv_context {
   pokemon_detector_sv_context(const struct pokemon_detector_sv_config config)
@@ -62,6 +63,9 @@ extern "C" void pokemon_detector_sv_crop_opponent_pokemons(
 }
 
 extern "C" void pokemon_detector_sv_export_opponent_pokemon_image(
-    struct pokemon_detector_sv_context *context, int index, const char *path) {
-  cv::imwrite(path, context->opponentPokemonImages[index]);
+    struct pokemon_detector_sv_context *context, int index, const char *basedir,
+    const char *filename) {
+  std::filesystem::path filepath(basedir);
+  filepath /= filename;
+  cv::imwrite(filepath.c_str(), context->opponentPokemonImages[index]);
 }

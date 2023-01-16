@@ -38,7 +38,8 @@ void pokemon_detector_sv_crop_opponent_pokemons(
     struct pokemon_detector_sv_context *context);
 
 void pokemon_detector_sv_export_opponent_pokemon_image(
-    struct pokemon_detector_sv_context *context, int index, const char *path);
+    struct pokemon_detector_sv_context *context, int index, const char *basedir,
+    const char *filename);
 
 #ifdef __cplusplus
 }
