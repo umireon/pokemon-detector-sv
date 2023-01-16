@@ -83,33 +83,33 @@ ExternalProject_Add(OpenCVDownload
             -DWITH_OPENCL=OFF
         )
 
-ExternalProject_Get_Property(OpenCVDownload BINARY_DIR)
+ExternalProject_Get_Property(OpenCVDownload INSTALL_DIR)
 add_library(OpenCV::Calib3d STATIC IMPORTED)
-set_target_properties(OpenCV::Calib3d PROPERTIES IMPORTED_LOCATION "${BINARY_DIR}/lib/libopencv_calib3d.a")
+set_target_properties(OpenCV::Calib3d PROPERTIES IMPORTED_LOCATION "${INSTALL_DIR}/lib/libopencv_calib3d.a")
 
 add_library(OpenCV::Core STATIC IMPORTED)
-set_target_properties(OpenCV::Core PROPERTIES IMPORTED_LOCATION "${BINARY_DIR}/lib/libopencv_core.a")
+set_target_properties(OpenCV::Core PROPERTIES IMPORTED_LOCATION "${INSTALL_DIR}/lib/libopencv_core.a")
 
 add_library(OpenCV::Features2d STATIC IMPORTED)
-set_target_properties(OpenCV::Features2d PROPERTIES IMPORTED_LOCATION "${BINARY_DIR}/lib/libopencv_features2d.a")
+set_target_properties(OpenCV::Features2d PROPERTIES IMPORTED_LOCATION "${INSTALL_DIR}/lib/libopencv_features2d.a")
 
 add_library(OpenCV::Flann STATIC IMPORTED)
-set_target_properties(OpenCV::Flann PROPERTIES IMPORTED_LOCATION "${BINARY_DIR}/lib/libopencv_flann.a")
+set_target_properties(OpenCV::Flann PROPERTIES IMPORTED_LOCATION "${INSTALL_DIR}/lib/libopencv_flann.a")
 
 add_library(OpenCV::Imgcodecs STATIC IMPORTED)
-set_target_properties(OpenCV::Imgcodecs PROPERTIES IMPORTED_LOCATION "${BINARY_DIR}/lib/libopencv_imgcodecs.a")
+set_target_properties(OpenCV::Imgcodecs PROPERTIES IMPORTED_LOCATION "${INSTALL_DIR}/lib/libopencv_imgcodecs.a")
 
 add_library(OpenCV::Imgproc STATIC IMPORTED)
-set_target_properties(OpenCV::Imgproc PROPERTIES IMPORTED_LOCATION "${BINARY_DIR}/lib/libopencv_imgproc.a")
+set_target_properties(OpenCV::Imgproc PROPERTIES IMPORTED_LOCATION "${INSTALL_DIR}/lib/libopencv_imgproc.a")
 
 add_library(OpenCV::Objdetect STATIC IMPORTED)
-set_target_properties(OpenCV::Objdetect PROPERTIES IMPORTED_LOCATION "${BINARY_DIR}/lib/libopencv_objdetect.a")
+set_target_properties(OpenCV::Objdetect PROPERTIES IMPORTED_LOCATION "${INSTALL_DIR}/lib/libopencv_objdetect.a")
 
 add_library(OpenCV::Libpng STATIC IMPORTED)
-set_target_properties(OpenCV::Libpng PROPERTIES IMPORTED_LOCATION "${BINARY_DIR}/lib/opencv4/3rdparty/liblibpng.a")
+set_target_properties(OpenCV::Libpng PROPERTIES IMPORTED_LOCATION "${INSTALL_DIR}/lib/opencv4/3rdparty/liblibpng.a")
 
 add_library(OpenCV::Zlib STATIC IMPORTED)
-set_target_properties(OpenCV::Zlib PROPERTIES IMPORTED_LOCATION "${BINARY_DIR}/lib/opencv4/3rdparty/libzlib.a")
+set_target_properties(OpenCV::Zlib PROPERTIES IMPORTED_LOCATION "${INSTALL_DIR}/lib/opencv4/3rdparty/libzlib.a")
 
 set_target_properties(
         OpenCV::Calib3d
@@ -122,7 +122,7 @@ set_target_properties(
         OpenCV::Libpng
         OpenCV::Zlib
         PROPERTIES
-        INTERFACE_INCLUDE_DIRECTORIES ${BINARY_DIR}/include/opencv4
+        INTERFACE_INCLUDE_DIRECTORIES ${INSTALL_DIR}/include/opencv4
 )
 add_library(OpenCV INTERFACE)
 target_link_libraries(OpenCV INTERFACE
