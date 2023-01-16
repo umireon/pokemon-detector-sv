@@ -121,10 +121,13 @@ if(APPLE)
     target_link_libraries(OpenCV INTERFACE "-framework Accelerate")
 endif(APPLE)
 
-file(GLOB dependent_libraries
-        ${INSTALL_DIR}/lib/*${CMAKE_STATIC_LIBRARY_SUFFIX}
-        ${INSTALL_DIR}/lib/opencv4/3rdparty/*${CMAKE_STATIC_LIBRARY_SUFFIX})
-install(FILES ${dependent_libraries} TYPE LIB)
+install(FILES
+        $<TARGET_PROPERTY:OpenCV::Core,IMPORTED_LOCATION>
+        $<TARGET_PROPERTY:OpenCV::Imgcodecs,IMPORTED_LOCATION>
+        $<TARGET_PROPERTY:OpenCV::Imgproc,IMPORTED_LOCATION>
+        $<TARGET_PROPERTY:OpenCV::Libpng,IMPORTED_LOCATION>
+        $<TARGET_PROPERTY:OpenCV::Zlib,IMPORTED_LOCATION>
+        TYPE LIB)
 
 add_dependencies(OpenCV OpenCVDownload)
 
