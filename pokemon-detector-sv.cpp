@@ -30,6 +30,7 @@ pokemon_detector_sv_load_screen(struct pokemon_detector_sv_context *context,
   auto &config = context->config;
   context->screenBGRA =
       cv::Mat(config.screen_height, config.screen_width, CV_8UC4, buf_bgra);
+  cv::imwrite("/Users/umireon/0.png", context->screenBGRA);
 }
 
 extern "C" void pokemon_detector_sv_crop_opponent_pokemons(
