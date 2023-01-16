@@ -20,11 +20,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="acc89297-3b83-4737-bccd-a653c77827cc" name="Changes" comment="Changes">
-      <change afterPath="$PROJECT_DIR$/.clang-format" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pokemon-detector-sv.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pokemon-detector-sv.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
     </list>
@@ -116,7 +111,7 @@
       <workItem from="1673841992302" duration="103000" />
       <workItem from="1673842102920" duration="40000" />
       <workItem from="1673842171372" duration="922000" />
-      <workItem from="1673843097538" duration="14985000" />
+      <workItem from="1673843097538" duration="16272000" />
     </task>
     <servers />
   </component>
