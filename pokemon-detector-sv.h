@@ -1,6 +1,10 @@
 #pragma once
 
-extern "C" struct pokemon_detector_sv_config {
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+struct pokemon_detector_sv_config {
   const int screen_width = 1920;
   const int screen_height = 1080;
   const int num_of_max_opponent_pokemons = 6;
@@ -9,18 +13,22 @@ extern "C" struct pokemon_detector_sv_config {
                                      {534, 632}, {636, 734}, {738, 836}};
 };
 
-extern "C" struct pokemon_detector_sv_context;
+struct pokemon_detector_sv_context;
 
-extern "C" struct pokemon_detector_sv_context *
+struct pokemon_detector_sv_context *
 pokemon_detector_sv_create(const struct pokemon_detector_sv_config config);
 
-extern "C" void pokemon_detector_sv_destroy(struct pokemon_detector_sv_context *context);
+void pokemon_detector_sv_destroy(struct pokemon_detector_sv_context *context);
 
-extern "C" void pokemon_detector_sv_load_screen(
+void pokemon_detector_sv_load_screen(
     struct pokemon_detector_sv_context *context, unsigned char *buf_bgra);
 
-extern "C" void pokemon_detector_sv_crop_opponent_pokemons(
+void pokemon_detector_sv_crop_opponent_pokemons(
     struct pokemon_detector_sv_context *context);
 
-extern "C" void pokemon_detector_sv_export_opponent_pokemon_image(
+void pokemon_detector_sv_export_opponent_pokemon_image(
     struct pokemon_detector_sv_context *context, int index, const char *path);
+
+#ifdef __cplusplus
+}
+#endif
