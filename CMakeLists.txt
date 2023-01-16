@@ -42,17 +42,17 @@ ExternalProject_Add(OpenCVDownload
             -DINSTALL_ANDROID_EXAMPLES=OFF
             -DINSTALL_TO_MANGLED_PATHS=OFF
             -DINSTALL_TESTS=OFF
-            -DBUILD_opencv_calib3d=ON
+            -DBUILD_opencv_calib3d=OFF
             -DBUILD_opencv_core=ON
             -DBUILD_opencv_dnn=OFF
-            -DBUILD_opencv_features2d=ON
-            -DBUILD_opencv_flann=ON
+            -DBUILD_opencv_features2d=OFF
+            -DBUILD_opencv_flann=OFF
             -DBUILD_opencv_gapi=OFF
             -DBUILD_opencv_highgui=OFF
             -DBUILD_opencv_imgcodecs=ON
             -DBUILD_opencv_imgproc=ON
             -DBUILD_opencv_ml=OFF
-            -DBUILD_opencv_objdetect=ON
+            -DBUILD_opencv_objdetect=OFF
             -DBUILD_opencv_photo=OFF
             -DBUILD_opencv_stitching=OFF
             -DBUILD_opencv_video=OFF
@@ -85,41 +85,25 @@ ExternalProject_Add(OpenCVDownload
         )
 
 ExternalProject_Get_Property(OpenCVDownload INSTALL_DIR)
-add_library(OpenCV::Calib3d STATIC IMPORTED)
-set_target_properties(OpenCV::Calib3d PROPERTIES IMPORTED_LOCATION "${INSTALL_DIR}/lib/libopencv_calib3d.a")
-
 add_library(OpenCV::Core STATIC IMPORTED)
-set_target_properties(OpenCV::Core PROPERTIES IMPORTED_LOCATION "${INSTALL_DIR}/lib/libopencv_core.a")
-
-add_library(OpenCV::Features2d STATIC IMPORTED)
-set_target_properties(OpenCV::Features2d PROPERTIES IMPORTED_LOCATION "${INSTALL_DIR}/lib/libopencv_features2d.a")
-
-add_library(OpenCV::Flann STATIC IMPORTED)
-set_target_properties(OpenCV::Flann PROPERTIES IMPORTED_LOCATION "${INSTALL_DIR}/lib/libopencv_flann.a")
+set_target_properties(OpenCV::Core PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/libopencv_core${CMAKE_STATIC_LIBRARY_SUFFIX})
 
 add_library(OpenCV::Imgcodecs STATIC IMPORTED)
-set_target_properties(OpenCV::Imgcodecs PROPERTIES IMPORTED_LOCATION "${INSTALL_DIR}/lib/libopencv_imgcodecs.a")
+set_target_properties(OpenCV::Imgcodecs PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/libopencv_imgcodecs${CMAKE_STATIC_LIBRARY_SUFFIX})
 
 add_library(OpenCV::Imgproc STATIC IMPORTED)
-set_target_properties(OpenCV::Imgproc PROPERTIES IMPORTED_LOCATION "${INSTALL_DIR}/lib/libopencv_imgproc.a")
-
-add_library(OpenCV::Objdetect STATIC IMPORTED)
-set_target_properties(OpenCV::Objdetect PROPERTIES IMPORTED_LOCATION "${INSTALL_DIR}/lib/libopencv_objdetect.a")
+set_target_properties(OpenCV::Imgproc PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/libopencv_imgproc${CMAKE_STATIC_LIBRARY_SUFFIX})
 
 add_library(OpenCV::Libpng STATIC IMPORTED)
-set_target_properties(OpenCV::Libpng PROPERTIES IMPORTED_LOCATION "${INSTALL_DIR}/lib/opencv4/3rdparty/liblibpng.a")
+set_target_properties(OpenCV::Libpng PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/opencv4/3rdparty/liblibpng${CMAKE_STATIC_LIBRARY_SUFFIX})
 
 add_library(OpenCV::Zlib STATIC IMPORTED)
-set_target_properties(OpenCV::Zlib PROPERTIES IMPORTED_LOCATION "${INSTALL_DIR}/lib/opencv4/3rdparty/libzlib.a")
+set_target_properties(OpenCV::Zlib PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/opencv4/3rdparty/libzlib${CMAKE_STATIC_LIBRARY_SUFFIX})
 
 set_target_properties(
-        OpenCV::Calib3d
         OpenCV::Core
-        OpenCV::Features2d
-        OpenCV::Flann
         OpenCV::Imgcodecs
         OpenCV::Imgproc
-        OpenCV::Objdetect
         OpenCV::Libpng
         OpenCV::Zlib
         PROPERTIES
@@ -127,19 +111,20 @@ set_target_properties(
 )
 add_library(OpenCV INTERFACE)
 target_link_libraries(OpenCV INTERFACE
-        OpenCV::Calib3d
         OpenCV::Core
-        OpenCV::Features2d
-        OpenCV::Flann
         OpenCV::Imgcodecs
         OpenCV::Imgproc
-        OpenCV::Objdetect
         OpenCV::Libpng
         OpenCV::Zlib
         )
 if(APPLE)
     target_link_libraries(OpenCV INTERFACE "-framework Accelerate")
 endif(APPLE)
+
+file(GLOB dependent_libraries
+        ${INSTALL_DIR}/lib/*${CMAKE_STATIC_LIBRARY_SUFFIX}
+        ${INSTALL_DIR}/lib/opencv4/3rdparty/*${CMAKE_STATIC_LIBRARY_SUFFIX})
+install(FILES ${dependent_libraries} TYPE LIB)
 
 add_dependencies(OpenCV OpenCVDownload)
 
