@@ -1,7 +1,7 @@
 #include "pokemon-detector-sv.h"
 #include <opencv2/opencv.hpp>
 
-struct pokemon_detector_sv_context {
+extern "C" struct pokemon_detector_sv_context {
   pokemon_detector_sv_context(const struct pokemon_detector_sv_config config)
       : config(config),
         opponentPokemonImages(config.num_of_max_opponent_pokemons, cv::Mat()) {}
@@ -12,23 +12,23 @@ struct pokemon_detector_sv_context {
   std::vector<cv::Mat> opponentPokemonMasks;
 };
 
-struct pokemon_detector_sv_context *
+extern "C" struct pokemon_detector_sv_context *
 pokemon_detector_sv_create(const struct pokemon_detector_sv_config config) {
   return new pokemon_detector_sv_context(config);
 }
 
-void pokemon_detector_sv_destroy(struct pokemon_detector_sv_context *context) {
+extern "C" void pokemon_detector_sv_destroy(struct pokemon_detector_sv_context *context) {
   delete context;
 }
 
-void pokemon_detector_sv_load_screen(
+extern "C" void pokemon_detector_sv_load_screen(
     struct pokemon_detector_sv_context *context, unsigned char *buf_bgra) {
   auto &config = context->config;
   context->screenBGRA =
       cv::Mat(config.screen_height, config.screen_width, CV_8UC4, buf_bgra);
 }
 
-void pokemon_detector_sv_crop_opponent_pokemons(
+extern "C" void pokemon_detector_sv_crop_opponent_pokemons(
     struct pokemon_detector_sv_context *context) {
   const auto &config = context->config;
   const auto &image = context->screenBGRA;
@@ -57,7 +57,7 @@ void pokemon_detector_sv_crop_opponent_pokemons(
   }
 }
 
-void pokemon_detector_sv_export_opponent_pokemon_image(
+extern "C" void pokemon_detector_sv_export_opponent_pokemon_image(
     struct pokemon_detector_sv_context *context, int index, const char *path) {
   cv::imwrite(path, context->opponentPokemonImages[index]);
 }
