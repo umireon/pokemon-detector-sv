@@ -10,6 +10,10 @@ struct pokemon_detector_sv_config {
   const int num_of_max_opponent_pokemons;
   const int opponent_col_range[2];
   const int opponent_row_range[6][2];
+  const int selecting_area_ranges[2][2];
+  const int selecting_area_hist_bins;
+  const int selecting_area_hist_max_index;
+  const double selecting_area_hist_ratio;
 };
 
 const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
@@ -22,7 +26,12 @@ const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
                            {432, 530},
                            {534, 632},
                            {636, 734},
-                           {738, 836}}};
+                           {738, 836}},
+    .selecting_area_ranges = {{ 149, 811 }, { 139, 842}},
+    .selecting_area_hist_bins = 30,
+    .selecting_area_hist_max_index = 17,
+    .selecting_area_hist_ratio = 0.5,
+};
 
 struct pokemon_detector_sv_context;
 
