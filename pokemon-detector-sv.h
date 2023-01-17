@@ -57,7 +57,7 @@ const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
     .classifier_black_transition = {.ranges_col = {100, 200},
                                     .ranges_row = {100, 200},
                                     .hist_channel = 2,
-                                    .hist_bins = 30,
+                                    .hist_bins = 8,
                                     .hist_max_index = 0,
                                     .hist_ratio = 0.8}};
 

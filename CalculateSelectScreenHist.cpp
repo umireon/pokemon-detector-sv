@@ -3,9 +3,9 @@
 #include <vector>
 
 static void calcHist(const cv::Mat &input, cv::Mat &hist) {
-  const int channels[]{0};
-  const int histSize[]{30};
-  const float hranges[] = {0, 180};
+  const int channels[]{2};
+  const int histSize[]{8};
+  const float hranges[] = {0, 256};
   const float *ranges[]{hranges};
   cv::calcHist(&input, 1, channels, cv::Mat(), hist, 1, histSize, ranges);
 }
