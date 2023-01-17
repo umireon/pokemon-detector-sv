@@ -2,6 +2,8 @@
 #include <opencv2/opencv.hpp>
 #include <filesystem>
 
+#include "SceneDetector.h"
+
 extern "C" struct pokemon_detector_sv_context {
   pokemon_detector_sv_context(const struct pokemon_detector_sv_config config)
       : config(config),
@@ -31,6 +33,12 @@ pokemon_detector_sv_load_screen(struct pokemon_detector_sv_context *context,
   context->screenBGRA =
       cv::Mat(config.screen_height, config.screen_width, CV_8UC4, buf_bgra);
   cv::imwrite("/Users/umireon/0.png", context->screenBGRA);
+}
+
+extern "C" enum pokemon_detector_sv_scene pokemon_detector_sv_detect_scene(
+    struct pokemon_detector_sv_context *context) {
+  SceneDetector detector(context->config);
+  return detector.detectScene(context->screenBGRA);
 }
 
 extern "C" void pokemon_detector_sv_crop_opponent_pokemons(

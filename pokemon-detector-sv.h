@@ -4,6 +4,11 @@
 extern "C" {
 #endif
 
+enum pokemon_detector_sv_scene {
+  POKEMON_DETECTOR_SV_SCENE_UNDEFINED,
+  POKEMON_DETECTOR_SV_SCENE_SELECT
+};
+
 struct pokemon_detector_sv_config {
   const int screen_width;
   const int screen_height;
@@ -27,7 +32,7 @@ const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
                            {534, 632},
                            {636, 734},
                            {738, 836}},
-    .selecting_area_ranges = {{ 149, 811 }, { 139, 842}},
+    .selecting_area_ranges = {{149, 811}, {139, 842}},
     .selecting_area_hist_bins = 30,
     .selecting_area_hist_max_index = 17,
     .selecting_area_hist_ratio = 0.5,
@@ -42,6 +47,9 @@ void pokemon_detector_sv_destroy(struct pokemon_detector_sv_context *context);
 
 void pokemon_detector_sv_load_screen(
     struct pokemon_detector_sv_context *context, unsigned char *buf_bgra);
+
+enum pokemon_detector_sv_scene
+pokemon_detector_sv_detect_scene(struct pokemon_detector_sv_context *context);
 
 void pokemon_detector_sv_crop_opponent_pokemons(
     struct pokemon_detector_sv_context *context);

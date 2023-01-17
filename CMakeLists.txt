@@ -132,9 +132,13 @@ install(FILES
 add_dependencies(OpenCV OpenCVDownload)
 
 add_library(pokemon-detector-sv STATIC)
-target_sources(pokemon-detector-sv PRIVATE pokemon-detector-sv.cpp PUBLIC FILE_SET
+target_sources(pokemon-detector-sv PRIVATE
+        pokemon-detector-sv.cpp
+        SceneDetector.cpp
+        PUBLIC FILE_SET
         HEADERS BASE_DIRS ${PROJECT_SOURCE_DIR} FILES pokemon-detector-sv.h)
 target_link_libraries(pokemon-detector-sv OpenCV)
+
 add_executable(pokemon-detector-sv-exe main.cpp)
 target_link_libraries(pokemon-detector-sv-exe OpenCV)
 
