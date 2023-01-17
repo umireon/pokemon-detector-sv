@@ -5,13 +5,13 @@
 #include "SceneDetector.h"
 
 extern "C" struct pokemon_detector_sv_context {
-  pokemon_detector_sv_context(const struct pokemon_detector_sv_config &config)
+  pokemon_detector_sv_context(const struct pokemon_detector_sv_config config)
       : config(config),
         opponentPokemonImages(config.num_of_max_opponent_pokemons, cv::Mat()),
         opponentPokemonMasks(config.num_of_max_opponent_pokemons, cv::Mat()),
         sceneDetector(config) {}
 
-  const struct pokemon_detector_sv_config &config;
+  const struct pokemon_detector_sv_config config;
   cv::Mat screenBGRA, screenBGR, screenHSV;
   std::vector<cv::Mat> opponentPokemonImages;
   std::vector<cv::Mat> opponentPokemonMasks;
