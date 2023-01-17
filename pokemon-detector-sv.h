@@ -6,12 +6,14 @@ extern "C" {
 
 enum pokemon_detector_sv_scene {
   POKEMON_DETECTOR_SV_SCENE_UNDEFINED,
-  POKEMON_DETECTOR_SV_SCENE_SELECT
+  POKEMON_DETECTOR_SV_SCENE_SELECT,
+  POKEMON_DETECTOR_SV_SCENE_BLACK_TRANSITION
 };
 
-struct pokemon_detector_sv_hue_classifier {
+struct pokemon_detector_sv_hist_classifier {
   const int ranges_col[2];
   const int ranges_row[2];
+  const int hist_channel;
   const int hist_bins;
   const int hist_max_index;
   const double hist_ratio;
@@ -23,32 +25,41 @@ struct pokemon_detector_sv_config {
   const int num_of_max_opponent_pokemons;
   const int opponent_col_range[2];
   const int opponent_row_range[6][2];
-  const struct pokemon_detector_sv_hue_classifier classifier_lobby_my_select;
-  const struct pokemon_detector_sv_hue_classifier
+  const struct pokemon_detector_sv_hist_classifier classifier_lobby_my_select;
+  const struct pokemon_detector_sv_hist_classifier
       classifier_lobby_opponent_select;
+  const struct pokemon_detector_sv_hist_classifier classifier_black_transition;
 };
 
-const struct pokemon_detector_sv_config pokemon_detector_sv_default_config =
-    {.screen_width = 1920,
-     .screen_height = 1080,
-     .num_of_max_opponent_pokemons = 6,
-     .opponent_col_range = {1239, 1337},
-     .opponent_row_range = {{228, 326},
-                            {330, 428},
-                            {432, 530},
-                            {534, 632},
-                            {636, 734},
-                            {738, 836}},
-     .classifier_lobby_my_select = {.ranges_col = {149, 811},
-                                    .ranges_row = {139, 842},
+const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
+    .screen_width = 1920,
+    .screen_height = 1080,
+    .num_of_max_opponent_pokemons = 6,
+    .opponent_col_range = {1239, 1337},
+    .opponent_row_range = {{228, 326},
+                           {330, 428},
+                           {432, 530},
+                           {534, 632},
+                           {636, 734},
+                           {738, 836}},
+    .classifier_lobby_my_select = {.ranges_col = {149, 811},
+                                   .ranges_row = {139, 842},
+                                   .hist_channel = 0,
+                                   .hist_bins = 30,
+                                   .hist_max_index = 17,
+                                   .hist_ratio = 0.5},
+    .classifier_lobby_opponent_select = {.ranges_col = {149, 811},
+                                         .ranges_row = {139, 842},
+                                         .hist_channel = 0,
+                                         .hist_bins = 30,
+                                         .hist_max_index = 0,
+                                         .hist_ratio = 0.8},
+    .classifier_black_transition = {.ranges_col = {100, 200},
+                                    .ranges_row = {100, 200},
+                                    .hist_channel = 2,
                                     .hist_bins = 30,
-                                    .hist_max_index = 17,
-                                    .hist_ratio = 0.5},
-     .classifier_lobby_opponent_select = {.ranges_col = {149, 811},
-                                          .ranges_row = {139, 842},
-                                          .hist_bins = 30,
-                                          .hist_max_index = 0,
-                                          .hist_ratio = 0.8}}
+                                    .hist_max_index = 29,
+                                    .hist_ratio = 0.8}};
 
 struct pokemon_detector_sv_context;
 

@@ -5,15 +5,17 @@
 #include "SceneDetector.h"
 
 extern "C" struct pokemon_detector_sv_context {
-  pokemon_detector_sv_context(const struct pokemon_detector_sv_config config)
+  pokemon_detector_sv_context(const struct pokemon_detector_sv_config &config)
       : config(config),
         opponentPokemonImages(config.num_of_max_opponent_pokemons, cv::Mat()),
-        opponentPokemonMasks(config.num_of_max_opponent_pokemons, cv::Mat()) {}
+        opponentPokemonMasks(config.num_of_max_opponent_pokemons, cv::Mat()),
+        sceneDetector(config) {}
 
-  struct pokemon_detector_sv_config config;
-  cv::Mat screenBGRA, screenHSV;
+  const struct pokemon_detector_sv_config &config;
+  cv::Mat screenBGRA, screenBGR, screenHSV;
   std::vector<cv::Mat> opponentPokemonImages;
   std::vector<cv::Mat> opponentPokemonMasks;
+  SceneDetector sceneDetector;
 };
 
 extern "C" struct pokemon_detector_sv_context *
@@ -32,13 +34,13 @@ pokemon_detector_sv_load_screen(struct pokemon_detector_sv_context *context,
   auto &config = context->config;
   context->screenBGRA =
       cv::Mat(config.screen_height, config.screen_width, CV_8UC4, buf_bgra);
-  cv::cvtColor(context->screenBGRA, context->screenHSV, cv::COLOR_BGR2HSV);
+  cv::cvtColor(context->screenBGRA, context->screenBGR, cv::COLOR_BGRA2BGR);
+  cv::cvtColor(context->screenBGR, context->screenHSV, cv::COLOR_BGR2HSV);
 }
 
 extern "C" enum pokemon_detector_sv_scene
 pokemon_detector_sv_detect_scene(struct pokemon_detector_sv_context *context) {
-  SceneDetector detector(context->config);
-  return detector.detectScene(context->screenHSV);
+  return context->sceneDetector.detectScene(context->screenHSV);
 }
 
 extern "C" void pokemon_detector_sv_crop_opponent_pokemons(
