@@ -138,4 +138,7 @@ target_link_libraries(pokemon-detector-sv OpenCV)
 add_executable(pokemon-detector-sv-exe main.cpp)
 target_link_libraries(pokemon-detector-sv-exe OpenCV)
 
+add_executable(CalculateSelectScreenHist CalculateSelectScreenHist.cpp)
+target_link_libraries(CalculateSelectScreenHist OpenCV)
+
 install(TARGETS pokemon-detector-sv FILE_SET HEADERS)
