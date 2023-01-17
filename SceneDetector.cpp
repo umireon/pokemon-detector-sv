@@ -21,11 +21,11 @@ bool SceneDetector::isSelectScreen(cv::Mat &screen) {
   auto ranges2 = config.selecting_area2_ranges;
   const cv::Range colRange2(ranges2[0][0], ranges2[0][1]),
       rowRange2(ranges2[1][0], ranges2[1][1]);
-  cv::Mat area2 = screen(rowRange1, colRange1);
+  cv::Mat area2 = screen(rowRange2, colRange2);
   cv::cvtColor(area2, area2, cv::COLOR_BGR2HSV);
-  bool predict2 = predictByHueHist(area2, config.selecting_area1_hist_bins,
-                                   config.selecting_area1_hist_ratio,
-                                   config.selecting_area1_hist_max_index);
+  bool predict2 = predictByHueHist(area2, config.selecting_area2_hist_bins,
+                                   config.selecting_area2_hist_ratio,
+                                   config.selecting_area2_hist_max_index);
 
   return predict1 && predict2;
 }

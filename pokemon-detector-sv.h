@@ -42,7 +42,7 @@ const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
     .selecting_area1_hist_ratio = 0.5,
     .selecting_area2_ranges = {{1229, 1649}, {227, 836}},
     .selecting_area2_hist_bins = 30,
-    .selecting_area2_hist_max_index = 17,
+    .selecting_area2_hist_max_index = 0,
     .selecting_area2_hist_ratio = 0.8,
 };
 
