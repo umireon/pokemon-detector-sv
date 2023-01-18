@@ -65,6 +65,7 @@ pokemon_detector_sv_detect_scene(struct pokemon_detector_sv_context *context) {
 extern "C" void pokemon_detector_sv_crop_opponent_pokemons(
     struct pokemon_detector_sv_context *context) {
   context->opponentPokemonsCropper.crop(context->screenBGRA);
+  context->opponentPokemonsCropper.generateMask();
 }
 
 extern "C" void pokemon_detector_sv_export_opponent_pokemon_image(

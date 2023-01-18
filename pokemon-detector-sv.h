@@ -24,6 +24,8 @@ struct pokemon_detector_sv_config {
   const int screen_height;
   const int opponent_col_range[2];
   const int opponent_row_range[6][2];
+  const int my_selection_range_col[2];
+  const int my_selection_range_raw[6][2];
   const struct pokemon_detector_sv_hist_classifier classifier_lobby_my_select;
   const struct pokemon_detector_sv_hist_classifier
       classifier_lobby_opponent_select;

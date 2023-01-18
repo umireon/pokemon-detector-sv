@@ -1,5 +1,8 @@
 #!/bin/bash
 set -euo pipefail
+descriptor_size=16
+normalized_height=98
+rows=$(($descriptor_size / 8))
 (
     printf '%s\n' '#include <vector>'
     printf '%s\n' '#include <opencv2/opencv.hpp>'
@@ -13,13 +16,13 @@ set -euo pipefail
     printf '%s\n' '};'
 
     printf '%s' 'static const std::vector<std::vector<uchar>> DATA = '
-    ./cmake-build-debug/AkAZETrainer ./train/PokemonRecognizer/*.png
+    ./cmake-build-debug/AkAZETrainer $descriptor_size $normalized_height ./train/PokemonRecognizer/*.png
     printf '%s\n' ';'
 
     printf '%s' 'const std::vector<cv::Mat> PokemonRecognizer::POKEMON_DESCRIPTORS = {'
     for i in $(seq 0 $(($(ls ./train/PokemonRecognizer/*.png | wc -l) - 1)))
     do
-    printf '%s' "cv::Mat(DATA[$i].size()/2,2,CV_8U,(void*)DATA[$i].data()),";
+      printf '%s' "cv::Mat(DATA[$i].size()/$rows,$rows,CV_8U,(void*)DATA[$i].data()),";
     done
     printf '%s\n' '};'
 ) > ./PokemonRecognizerGenerated.cpp

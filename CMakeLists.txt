@@ -164,4 +164,10 @@ target_link_libraries(PokemonRecognizerBench OpenCV)
 add_executable(AKAZETrainer AKAZETrainer.cpp)
 target_link_libraries(AKAZETrainer OpenCV)
 
+add_executable(EntityCropperPlayground EntityCropperPlayground.cpp EntityCropper.cpp)
+target_link_libraries(EntityCropperPlayground OpenCV)
+
+add_executable(SelectionRecognizerBench SelectionRecognizerBench.cpp SelectionRecognizer.cpp SelectionRecognizerGenerated.cpp)
+target_link_libraries(SelectionRecognizerBench OpenCV)
+
 install(TARGETS pokemon-detector-sv FILE_SET HEADERS)

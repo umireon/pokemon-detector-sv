@@ -17,4 +17,5 @@ public:
                 const std::array<std::array<int, 2>, 6> rangesRow)
       : rangeCol(rangeCol), rangesRow(rangesRow), seedPoint(0, 0) {}
   void crop(const cv::Mat &screenBGRA);
+  void generateMask(void);
 };
