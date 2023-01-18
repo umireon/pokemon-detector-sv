@@ -1,17 +1,18 @@
 #include "SelectionRecognizer.h"
-#include <iostream>
+
 static constexpr int NORMALIZED_HEIGHT = 98;
+static constexpr int DESCRIPTOR_SIZE = 64;
 
 std::string SelectionRecognizer::recognizeSelection(const cv::Mat &imageBGR) {
   cv::Mat scaledBGR;
   cv::resize(imageBGR, scaledBGR,
              cv::Size(imageBGR.cols * NORMALIZED_HEIGHT / imageBGR.rows,
                       NORMALIZED_HEIGHT));
-  std::cout << scaledBGR.size;
 
   std::vector<cv::KeyPoint> targetKeyPoints;
   cv::Mat targetDescriptors;
-  auto algorithm = cv::AKAZE::create(cv::AKAZE::DESCRIPTOR_MLDB, 64);
+  auto algorithm =
+      cv::AKAZE::create(cv::AKAZE::DESCRIPTOR_MLDB, DESCRIPTOR_SIZE);
   algorithm->detectAndCompute(scaledBGR, cv::Mat(), targetKeyPoints,
                               targetDescriptors);
 
