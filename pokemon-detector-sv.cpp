@@ -3,6 +3,7 @@
 #include <opencv2/opencv.hpp>
 
 #include "EntityCropper.h"
+#include "PokemonRecognizer.h"
 #include "SceneDetector.h"
 
 static constexpr std::array<int, 2>
@@ -30,6 +31,8 @@ extern "C" struct pokemon_detector_sv_context {
   cv::Mat screenBGRA, screenBGR, screenHSV;
   SceneDetector sceneDetector;
   EntityCropper opponentPokemonsCropper;
+  PokemonRecognizer recognizer;
+  std::array<std::string, 6> opponentPokemonIds;
 };
 
 extern "C" struct pokemon_detector_sv_context *
@@ -69,4 +72,13 @@ extern "C" void pokemon_detector_sv_export_opponent_pokemon_image(
   filepath /= filename;
   cv::imwrite(filepath.c_str(),
               context->opponentPokemonsCropper.imagesBGRA[index]);
+}
+
+extern "C" const char *pokemon_detector_sv_recognize_opponent_pokemon(
+    struct pokemon_detector_sv_context *context, int index) {
+  PokemonRecognizer recognizer;
+  context->opponentPokemonIds[index] = recognizer.recognizePokemon(
+      context->opponentPokemonsCropper.imagesBGR[index],
+      context->opponentPokemonsCropper.masks[index]);
+  return context->opponentPokemonIds[index].data();
 }

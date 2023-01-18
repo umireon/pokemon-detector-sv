@@ -79,6 +79,9 @@ void pokemon_detector_sv_export_opponent_pokemon_image(
     struct pokemon_detector_sv_context *context, int index, const char *basedir,
     const char *filename);
 
+const char *pokemon_detector_sv_recognize_opponent_pokemon(
+    struct pokemon_detector_sv_context *context, int index);
+
 #ifdef __cplusplus
 }
 #endif
