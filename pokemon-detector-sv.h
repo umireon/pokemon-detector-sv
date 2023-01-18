@@ -25,8 +25,8 @@ struct pokemon_detector_sv_config {
   const int screen_height;
   const int opponent_col_range[2];
   const int opponent_row_range[6][2];
-  const int my_selection_range_col[2];
-  const int my_selection_range_raw[6][2];
+  const int selection_order_range_col[2];
+  const int selection_order_range_row[6][2];
   const int my_team_select_range_col[2];
   const int my_team_select_range_row[6][2];
   const struct pokemon_detector_sv_hist_classifier classifier_lobby_my_select;
@@ -46,8 +46,8 @@ const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
                            {534, 632},
                            {636, 734},
                            {738, 836}},
-    .my_selection_range_col = {774, 926},
-    .my_selection_range_raw = {{147, 196},
+    .selection_order_range_col = {774, 926},
+    .selection_order_range_row = {{147, 196},
                                {263, 312},
                                {379, 428},
                                {495, 544},
@@ -105,6 +105,10 @@ const char *pokemon_detector_sv_recognize_opponent_pokemon(
 
 int pokemon_detector_sv_recognize_my_selection(
     struct pokemon_detector_sv_context *context, int index);
+
+
+extern "C" void pokemon_detector_sv_export_image_selection_order(
+    struct pokemon_detector_sv_context *context, int index, const char *path);
 
 #ifdef __cplusplus
 }

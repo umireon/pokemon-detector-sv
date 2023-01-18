@@ -30,9 +30,9 @@ extern "C" struct pokemon_detector_sv_context {
         opponentPokemonsCropper(
             convertInt2ToStdArray2(config.opponent_col_range),
             convertInt62ToStdArray62(config.opponent_row_range)),
-        mySelectionCropper(
-            convertInt2ToStdArray2(config.my_selection_range_col),
-            convertInt62ToStdArray62(config.my_selection_range_raw)) {}
+        selectionOrderCropper(
+            convertInt2ToStdArray2(config.selection_order_range_col),
+            convertInt62ToStdArray62(config.selection_order_range_row)) {}
 
   const struct pokemon_detector_sv_config config;
   cv::Mat screenBGRA, screenBGR, screenHSV;
@@ -40,7 +40,7 @@ extern "C" struct pokemon_detector_sv_context {
   EntityCropper opponentPokemonsCropper;
   PokemonRecognizer pokemonRecognizer;
   std::array<std::string, 6> opponentPokemonIds;
-  EntityCropper mySelectionCropper;
+  EntityCropper selectionOrderCropper;
   SelectionRecognizer selectionRecognizer;
 };
 
@@ -87,7 +87,7 @@ extern "C" void pokemon_detector_sv_export_opponent_pokemon_image(
 
 extern "C" void pokemon_detector_sv_export_image_selection_order(
     struct pokemon_detector_sv_context *context, int index, const char *path) {
-  cv::imwrite(path, context->mySelectionCropper.imagesBGRA[index]);
+  cv::imwrite(path, context->selectionOrderCropper.imagesBGRA[index]);
 }
 
 extern "C" const char *pokemon_detector_sv_recognize_opponent_pokemon(
@@ -102,11 +102,11 @@ extern "C" const char *pokemon_detector_sv_recognize_opponent_pokemon(
 extern "C" int pokemon_detector_sv_recognize_my_selection(
     struct pokemon_detector_sv_context *context, int index) {
   return context->selectionRecognizer.recognizeSelection(
-      context->mySelectionCropper.imagesBGR[index]);
+      context->selectionOrderCropper.imagesBGR[index]);
 }
 
 extern "C" void pokemon_detector_sv_crop_my_team_pokemons(
     struct pokemon_detector_sv_context *context) {
-  context->mySelectionCropper.crop(context->screenBGRA);
-  context->mySelectionCropper.generateMask();
+  context->selectionOrderCropper.crop(context->screenBGRA);
+  context->selectionOrderCropper.generateMask();
 }
