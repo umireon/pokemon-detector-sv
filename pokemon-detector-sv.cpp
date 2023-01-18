@@ -45,9 +45,9 @@ pokemon_detector_sv_destroy(struct pokemon_detector_sv_context *context) {
 extern "C" void
 pokemon_detector_sv_load_screen(struct pokemon_detector_sv_context *context,
                                 unsigned char *buf_bgra) {
-  auto &config = context->config;
   context->screenBGRA =
-      cv::Mat(config.screen_height, config.screen_width, CV_8UC4, buf_bgra);
+      cv::Mat(context->config.screen_height, context->config.screen_width,
+              CV_8UC4, buf_bgra);
   cv::cvtColor(context->screenBGRA, context->screenBGR, cv::COLOR_BGRA2BGR);
   cv::cvtColor(context->screenBGR, context->screenHSV, cv::COLOR_BGR2HSV);
 }
