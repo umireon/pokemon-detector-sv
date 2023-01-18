@@ -85,6 +85,11 @@ extern "C" void pokemon_detector_sv_export_opponent_pokemon_image(
               context->opponentPokemonsCropper.imagesBGRA[index]);
 }
 
+extern "C" void pokemon_detector_sv_export_image_selection_order(
+    struct pokemon_detector_sv_context *context, int index, const char *path) {
+  cv::imwrite(path, context->mySelectionCropper.imagesBGRA[index]);
+}
+
 extern "C" const char *pokemon_detector_sv_recognize_opponent_pokemon(
     struct pokemon_detector_sv_context *context, int index) {
   context->opponentPokemonIds[index] =
@@ -98,4 +103,10 @@ extern "C" int pokemon_detector_sv_recognize_my_selection(
     struct pokemon_detector_sv_context *context, int index) {
   return context->selectionRecognizer.recognizeSelection(
       context->mySelectionCropper.imagesBGR[index]);
+}
+
+extern "C" void pokemon_detector_sv_crop_my_team_pokemons(
+    struct pokemon_detector_sv_context *context) {
+  context->mySelectionCropper.crop(context->screenBGRA);
+  context->mySelectionCropper.generateMask();
 }

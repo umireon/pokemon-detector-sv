@@ -27,6 +27,8 @@ struct pokemon_detector_sv_config {
   const int opponent_row_range[6][2];
   const int my_selection_range_col[2];
   const int my_selection_range_raw[6][2];
+  const int my_team_select_range_col[2];
+  const int my_team_select_range_row[6][2];
   const struct pokemon_detector_sv_hist_classifier classifier_lobby_my_select;
   const struct pokemon_detector_sv_hist_classifier
       classifier_lobby_opponent_select;
@@ -51,6 +53,8 @@ const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
                                {495, 544},
                                {611, 660},
                                {727, 776}},
+    .my_team_select_range_col = {0, 1},
+    .my_team_select_range_row = {{}, {}, {}, {}, {}, {}},
     .classifier_lobby_my_select = {.ranges_col = {149, 811},
                                    .ranges_row = {139, 842},
                                    .hist_channel = 0,
