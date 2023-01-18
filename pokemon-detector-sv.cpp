@@ -2,20 +2,34 @@
 #include <filesystem>
 #include <opencv2/opencv.hpp>
 
+#include "EntityCropper.h"
 #include "SceneDetector.h"
+
+static constexpr std::array<int, 2>
+convertInt2ToStdArray2(const int cArray[2]) {
+  return std::array<int, 2>{cArray[0], cArray[1]};
+}
+
+static constexpr std::array<std::array<int, 2>, 6>
+convertInt62ToStdArray62(const int cArray[6][2]) {
+  return std::array<std::array<int, 2>, 6>{
+      convertInt2ToStdArray2(cArray[0]), convertInt2ToStdArray2(cArray[1]),
+      convertInt2ToStdArray2(cArray[2]), convertInt2ToStdArray2(cArray[3]),
+      convertInt2ToStdArray2(cArray[4]), convertInt2ToStdArray2(cArray[5]),
+  };
+}
 
 extern "C" struct pokemon_detector_sv_context {
   pokemon_detector_sv_context(const struct pokemon_detector_sv_config config)
-      : config(config),
-        opponentPokemonImages(config.num_of_max_opponent_pokemons, cv::Mat()),
-        opponentPokemonMasks(config.num_of_max_opponent_pokemons, cv::Mat()),
-        sceneDetector(this->config) {}
+      : config(config), sceneDetector(this->config),
+        opponentPokemonsCropper(
+            convertInt2ToStdArray2(config.opponent_col_range),
+            convertInt62ToStdArray62(config.opponent_row_range)) {}
 
   const struct pokemon_detector_sv_config config;
   cv::Mat screenBGRA, screenBGR, screenHSV;
-  std::vector<cv::Mat> opponentPokemonImages;
-  std::vector<cv::Mat> opponentPokemonMasks;
   SceneDetector sceneDetector;
+  EntityCropper opponentPokemonsCropper;
 };
 
 extern "C" struct pokemon_detector_sv_context *
@@ -45,32 +59,7 @@ pokemon_detector_sv_detect_scene(struct pokemon_detector_sv_context *context) {
 
 extern "C" void pokemon_detector_sv_crop_opponent_pokemons(
     struct pokemon_detector_sv_context *context) {
-  const auto &config = context->config;
-  const auto &image = context->screenBGRA;
-  for (int i = 0; i < config.num_of_max_opponent_pokemons; i++) {
-    const cv::Range colRange(config.opponent_col_range[0],
-                             config.opponent_col_range[1]),
-        rowRange(config.opponent_row_range[i][0],
-                 config.opponent_row_range[i][1]);
-    auto &pokemonImageBGRA = context->opponentPokemonImages[i];
-    pokemonImageBGRA = image(rowRange, colRange);
-
-    cv::Mat pokemonImageBGR, mask;
-    cv::cvtColor(pokemonImageBGRA, pokemonImageBGR, cv::COLOR_BGRA2BGR);
-    cv::Point seedPoint(0, 0);
-    cv::floodFill(pokemonImageBGR, mask, seedPoint, 0, 0, 0, 0,
-                  cv::FLOODFILL_MASK_ONLY);
-
-    auto &pokemonMask = context->opponentPokemonMasks[i];
-    cv::Range cropCol(1, mask.cols - 1), cropRow(1, mask.rows - 1);
-    pokemonMask = 1 - mask(cropCol, cropRow);
-    for (int x = 0; x < pokemonImageBGRA.cols; x++) {
-      for (int y = 0; y < pokemonImageBGRA.rows; y++) {
-        pokemonImageBGRA.at<cv::Vec4b>(y, x)[3] =
-            pokemonMask.at<unsigned char>(y, x) * 255;
-      }
-    }
-  }
+  context->opponentPokemonsCropper.crop(context->screenBGRA);
 }
 
 extern "C" void pokemon_detector_sv_export_opponent_pokemon_image(
@@ -78,5 +67,6 @@ extern "C" void pokemon_detector_sv_export_opponent_pokemon_image(
     const char *filename) {
   std::filesystem::path filepath(basedir);
   filepath /= filename;
-  cv::imwrite(filepath.c_str(), context->opponentPokemonImages[index]);
+  cv::imwrite(filepath.c_str(),
+              context->opponentPokemonsCropper.imagesBGRA[index]);
 }
