@@ -154,16 +154,13 @@ target_link_libraries(pokemon-detector-sv-exe OpenCV)
 add_executable(CalculateSelectScreenHist CalculateSelectScreenHist.cpp SceneDetector.cpp)
 target_link_libraries(CalculateSelectScreenHist OpenCV)
 
-add_executable(AKAZETest AKAZETest.cpp)
-target_link_libraries(AKAZETest OpenCV)
-
 add_executable(CalculatePokemonHist CalculatePokemonHist.cpp)
 target_link_libraries(CalculatePokemonHist OpenCV)
 
-add_executable(PokemonRecognizerTrain PokemonRecognizerTrain.cpp)
-target_link_libraries(PokemonRecognizerTrain OpenCV)
-
 add_executable(PokemonRecognizerBench PokemonRecognizerBench.cpp PokemonRecognizer.cpp PokemonRecognizerGenerated.cpp)
 target_link_libraries(PokemonRecognizerBench OpenCV)
+
+add_executable(AKAZETrainer AKAZETrainer.cpp)
+target_link_libraries(AKAZETrainer OpenCV)
 
 install(TARGETS pokemon-detector-sv FILE_SET HEADERS)
