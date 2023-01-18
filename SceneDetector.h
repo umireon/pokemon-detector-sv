@@ -5,12 +5,18 @@
 
 class SceneDetector {
 public:
-  enum State { STATE_UNKNOWN, STATE_SELECT, STATE_MATCH_START, STATE_MATCH };
+  const pokemon_detector_sv_hist_classifier classifierLobbyMySelect;
+  const pokemon_detector_sv_hist_classifier classifierLobbyOpponentSelect;
+  const pokemon_detector_sv_hist_classifier classifierBlackTransition;
 
-  const pokemon_detector_sv_config &config;
-  State currentState;
+  SceneDetector(
+      const pokemon_detector_sv_hist_classifier classifierLobbyMySelect,
+      const pokemon_detector_sv_hist_classifier classifierLobbyOpponentSelect,
+      const pokemon_detector_sv_hist_classifier classifierBlackTransition)
+      : classifierLobbyMySelect(classifierLobbyMySelect),
+        classifierLobbyOpponentSelect(classifierLobbyOpponentSelect),
+        classifierBlackTransition(classifierBlackTransition) {}
 
-  SceneDetector(const pokemon_detector_sv_config &config) : config(config) {}
   pokemon_detector_sv_scene detectScene(cv::Mat &screenHSV);
   bool isSelectScreen(cv::Mat &screenHSV);
   bool isBlackTransition(cv::Mat &screenHSV);

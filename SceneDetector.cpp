@@ -11,12 +11,12 @@ pokemon_detector_sv_scene SceneDetector::detectScene(cv::Mat &screenHSV) {
 }
 
 bool SceneDetector::isSelectScreen(cv::Mat &screenHSV) {
-  return predictByHueHist(screenHSV, config.classifier_lobby_my_select) &&
-         predictByHueHist(screenHSV, config.classifier_lobby_opponent_select);
+  return predictByHueHist(screenHSV, classifierLobbyMySelect) &&
+         predictByHueHist(screenHSV, classifierLobbyOpponentSelect);
 }
 
 bool SceneDetector::isBlackTransition(cv::Mat &screenHSV) {
-  return predictByHueHist(screenHSV, config.classifier_black_transition);
+  return predictByHueHist(screenHSV, classifierBlackTransition);
 }
 
 void SceneDetector::calcHistHue(const cv::Mat &areaHSV, cv::Mat &hist,
