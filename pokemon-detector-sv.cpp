@@ -85,11 +85,6 @@ extern "C" void pokemon_detector_sv_export_opponent_pokemon_image(
               context->opponentPokemonsCropper.imagesBGRA[index]);
 }
 
-extern "C" void pokemon_detector_sv_export_image_selection_order(
-    struct pokemon_detector_sv_context *context, int index, const char *path) {
-  cv::imwrite(path, context->selectionOrderCropper.imagesBGRA[index]);
-}
-
 extern "C" const char *pokemon_detector_sv_recognize_opponent_pokemon(
     struct pokemon_detector_sv_context *context, int index) {
   context->opponentPokemonIds[index] =
@@ -99,14 +94,25 @@ extern "C" const char *pokemon_detector_sv_recognize_opponent_pokemon(
   return context->opponentPokemonIds[index].data();
 }
 
-extern "C" int pokemon_detector_sv_recognize_my_selection(
+extern "C" void pokemon_detector_sv_crop_my_team_pokemons(
+    struct pokemon_detector_sv_context *context) {
+  context->selectionOrderCropper.crop(context->screenBGRA);
+  context->selectionOrderCropper.generateMask();
+}
+
+extern "C" void pokemon_detector_sv_selection_order_crop(
+    struct pokemon_detector_sv_context *context) {
+  context->opponentPokemonsCropper.crop(context->screenBGRA);
+  context->opponentPokemonsCropper.generateMask();
+}
+
+extern "C" int pokemon_detector_sv_selection_order_recognize(
     struct pokemon_detector_sv_context *context, int index) {
   return context->selectionRecognizer.recognizeSelection(
       context->selectionOrderCropper.imagesBGR[index]);
 }
 
-extern "C" void pokemon_detector_sv_crop_my_team_pokemons(
-    struct pokemon_detector_sv_context *context) {
-  context->selectionOrderCropper.crop(context->screenBGRA);
-  context->selectionOrderCropper.generateMask();
+extern "C" void pokemon_detector_sv_selection_order_export(
+    struct pokemon_detector_sv_context *context, int index, const char *path) {
+  cv::imwrite(path, context->selectionOrderCropper.imagesBGRA[index]);
 }

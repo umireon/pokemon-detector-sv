@@ -48,11 +48,11 @@ const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
                            {738, 836}},
     .selection_order_range_col = {774, 926},
     .selection_order_range_row = {{147, 196},
-                               {263, 312},
-                               {379, 428},
-                               {495, 544},
-                               {611, 660},
-                               {727, 776}},
+                                  {263, 312},
+                                  {379, 428},
+                                  {495, 544},
+                                  {611, 660},
+                                  {727, 776}},
     .my_team_select_range_col = {0, 1},
     .my_team_select_range_row = {{}, {}, {}, {}, {}, {}},
     .classifier_lobby_my_select = {.ranges_col = {149, 811},
@@ -103,11 +103,17 @@ void pokemon_detector_sv_export_opponent_pokemon_image(
 const char *pokemon_detector_sv_recognize_opponent_pokemon(
     struct pokemon_detector_sv_context *context, int index);
 
-int pokemon_detector_sv_recognize_my_selection(
+int pokemon_detector_sv_recognize_selection_order(
     struct pokemon_detector_sv_context *context, int index);
 
-
 extern "C" void pokemon_detector_sv_export_image_selection_order(
+    struct pokemon_detector_sv_context *context, int index, const char *path);
+
+void pokemon_detector_sv_selection_order_crop(
+    struct pokemon_detector_sv_context *context);
+int pokemon_detector_sv_selection_order_recognize(
+    struct pokemon_detector_sv_context *context, int index);
+void pokemon_detector_sv_selection_order_export(
     struct pokemon_detector_sv_context *context, int index, const char *path);
 
 #ifdef __cplusplus
