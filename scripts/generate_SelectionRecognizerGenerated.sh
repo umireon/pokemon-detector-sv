@@ -8,10 +8,10 @@ rows=$(($descriptor_size / 8))
     printf '%s\n' '#include <opencv2/opencv.hpp>'
     printf '%s\n' '#include "SelectionRecognizer.h"'
 
-    printf '%s' 'const std::vector<std::string> SelectionRecognizer::SELECTION_IDS = {'
+    printf '%s' 'const std::vector<int> SelectionRecognizer::SELECTION_INDEX = {'
     for name in $(basename -s .png ./train/SelectionRecognizer/*.png)
     do
-    printf '%s' \"$name\",
+      printf '%s' ${name: -1},
     done
     printf '%s\n' '};'
 

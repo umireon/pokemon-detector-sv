@@ -42,6 +42,13 @@ const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
                            {534, 632},
                            {636, 734},
                            {738, 836}},
+    .my_selection_range_col = {774, 926},
+    .my_selection_range_raw = {{147, 196},
+                               {263, 312},
+                               {379, 428},
+                               {495, 544},
+                               {611, 660},
+                               {727, 776}},
     .classifier_lobby_my_select = {.ranges_col = {149, 811},
                                    .ranges_row = {139, 842},
                                    .hist_channel = 0,
@@ -82,6 +89,9 @@ void pokemon_detector_sv_export_opponent_pokemon_image(
     const char *filename);
 
 const char *pokemon_detector_sv_recognize_opponent_pokemon(
+    struct pokemon_detector_sv_context *context, int index);
+
+int pokemon_detector_sv_recognize_my_selection(
     struct pokemon_detector_sv_context *context, int index);
 
 #ifdef __cplusplus

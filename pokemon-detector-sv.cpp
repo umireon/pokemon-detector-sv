@@ -5,6 +5,7 @@
 #include "EntityCropper.h"
 #include "PokemonRecognizer.h"
 #include "SceneDetector.h"
+#include "SelectionRecognizer.h"
 
 static constexpr std::array<int, 2>
 convertInt2ToStdArray2(const int cArray[2]) {
@@ -27,14 +28,19 @@ extern "C" struct pokemon_detector_sv_context {
                                       config.classifier_black_transition),
         opponentPokemonsCropper(
             convertInt2ToStdArray2(config.opponent_col_range),
-            convertInt62ToStdArray62(config.opponent_row_range)) {}
+            convertInt62ToStdArray62(config.opponent_row_range)),
+        mySelectionCropper(
+            convertInt2ToStdArray2(config.my_selection_range_col),
+            convertInt62ToStdArray62(config.my_selection_range_raw)) {}
 
   const struct pokemon_detector_sv_config config;
   cv::Mat screenBGRA, screenBGR, screenHSV;
   SceneDetector sceneDetector;
   EntityCropper opponentPokemonsCropper;
-  PokemonRecognizer recognizer;
+  PokemonRecognizer pokemonRecognizer;
   std::array<std::string, 6> opponentPokemonIds;
+  EntityCropper mySelectionCropper;
+  SelectionRecognizer selectionRecognizer;
 };
 
 extern "C" struct pokemon_detector_sv_context *
@@ -79,9 +85,15 @@ extern "C" void pokemon_detector_sv_export_opponent_pokemon_image(
 
 extern "C" const char *pokemon_detector_sv_recognize_opponent_pokemon(
     struct pokemon_detector_sv_context *context, int index) {
-  PokemonRecognizer recognizer;
-  context->opponentPokemonIds[index] = recognizer.recognizePokemon(
-      context->opponentPokemonsCropper.imagesBGR[index],
-      context->opponentPokemonsCropper.masks[index]);
+  context->opponentPokemonIds[index] =
+      context->pokemonRecognizer.recognizePokemon(
+          context->opponentPokemonsCropper.imagesBGR[index],
+          context->opponentPokemonsCropper.masks[index]);
   return context->opponentPokemonIds[index].data();
+}
+
+extern "C" int pokemon_detector_sv_recognize_my_selection(
+    struct pokemon_detector_sv_context *context, int index) {
+  return context->selectionRecognizer.recognizeSelection(
+      context->mySelectionCropper.imagesBGR[index]);
 }

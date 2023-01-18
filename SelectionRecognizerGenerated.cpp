@@ -1,10 +1,10 @@
 #include "SelectionRecognizer.h"
 #include <opencv2/opencv.hpp>
 #include <vector>
-const std::vector<std::string> SelectionRecognizer::SELECTION_IDS = {
-    "ja1",
-    "ja2",
-    "ja3",
+const std::vector<int> SelectionRecognizer::SELECTION_INDEX = {
+    1,
+    2,
+    3,
 };
 static const std::vector<std::vector<uchar>> DATA = {
     {

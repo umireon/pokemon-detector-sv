@@ -7,9 +7,9 @@
 
 class SelectionRecognizer {
 public:
-  std::string recognizeSelection(const cv::Mat &imageBGR);
+  int recognizeSelection(const cv::Mat &imageBGR);
 
 private:
-  static const std::vector<std::string> SELECTION_IDS;
+  static const std::vector<int> SELECTION_INDEX;
   static const std::vector<cv::Mat> SELECTION_DESCRIPTORS;
 };

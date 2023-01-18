@@ -2,8 +2,9 @@
 
 static constexpr int NORMALIZED_HEIGHT = 98;
 static constexpr int DESCRIPTOR_SIZE = 64;
+static constexpr int UNRECOGNIZED_THRESHOLD = 100;
 
-std::string SelectionRecognizer::recognizeSelection(const cv::Mat &imageBGR) {
+int SelectionRecognizer::recognizeSelection(const cv::Mat &imageBGR) {
   cv::Mat scaledBGR;
   cv::resize(imageBGR, scaledBGR,
              cv::Size(imageBGR.cols * NORMALIZED_HEIGHT / imageBGR.rows,
@@ -38,9 +39,9 @@ std::string SelectionRecognizer::recognizeSelection(const cv::Mat &imageBGR) {
   const auto index = std::distance(
       results.begin(), std::min_element(results.begin(), results.end()));
 
-  if (results[index] > 100) {
-    return "unselected";
+  if (results[index] > UNRECOGNIZED_THRESHOLD) {
+    return -1;
   } else {
-    return SELECTION_IDS[index];
+    return SELECTION_INDEX[index];
   }
 }
