@@ -60,13 +60,14 @@ pokemon_detector_sv_load_screen(struct pokemon_detector_sv_context *context,
   context->screenBGRA =
       cv::Mat(context->config.screen_height, context->config.screen_width,
               CV_8UC4, buf_bgra);
-  cv::cvtColor(context->screenBGRA, context->screenBGR, cv::COLOR_BGRA2BGR);
-  cv::cvtColor(context->screenBGR, context->screenHSV, cv::COLOR_BGR2HSV);
 }
 
 extern "C" enum pokemon_detector_sv_scene
 pokemon_detector_sv_detect_scene(struct pokemon_detector_sv_context *context) {
-  return context->sceneDetector.detectScene(context->screenHSV);
+  cv::Mat screenBGR, screenHSV;
+  cv::cvtColor(context->screenBGRA, screenBGR, cv::COLOR_BGRA2BGR);
+  cv::cvtColor(screenBGR, screenHSV, cv::COLOR_BGR2HSV);
+  return context->sceneDetector.detectScene(screenHSV);
 }
 
 extern "C" void pokemon_detector_sv_crop_opponent_pokemons(
