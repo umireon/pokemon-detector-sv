@@ -22,7 +22,6 @@ struct pokemon_detector_sv_hist_classifier {
 struct pokemon_detector_sv_config {
   const int screen_width;
   const int screen_height;
-  const int num_of_max_opponent_pokemons;
   const int opponent_col_range[2];
   const int opponent_row_range[6][2];
   const struct pokemon_detector_sv_hist_classifier classifier_lobby_my_select;
@@ -34,7 +33,6 @@ struct pokemon_detector_sv_config {
 const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
     .screen_width = 1920,
     .screen_height = 1080,
-    .num_of_max_opponent_pokemons = 6,
     .opponent_col_range = {1239, 1337},
     .opponent_row_range = {{228, 326},
                            {330, 428},
