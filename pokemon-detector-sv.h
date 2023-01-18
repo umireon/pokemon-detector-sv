@@ -6,8 +6,9 @@ extern "C" {
 
 enum pokemon_detector_sv_scene {
   POKEMON_DETECTOR_SV_SCENE_UNDEFINED,
-  POKEMON_DETECTOR_SV_SCENE_SELECT,
-  POKEMON_DETECTOR_SV_SCENE_BLACK_TRANSITION
+  POKEMON_DETECTOR_SV_SCENE_SELECT_POKEMON,
+  POKEMON_DETECTOR_SV_SCENE_BLACK_TRANSITION,
+  POKEMON_DETECTOR_SV_SCENE_SELECT_MY_TEAM
 };
 
 struct pokemon_detector_sv_hist_classifier {
@@ -30,6 +31,7 @@ struct pokemon_detector_sv_config {
   const struct pokemon_detector_sv_hist_classifier
       classifier_lobby_opponent_select;
   const struct pokemon_detector_sv_hist_classifier classifier_black_transition;
+  const struct pokemon_detector_sv_hist_classifier classifier_select_my_team;
 };
 
 const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
@@ -66,7 +68,13 @@ const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
                                     .hist_channel = 2,
                                     .hist_bins = 8,
                                     .hist_max_index = 0,
-                                    .hist_ratio = 0.8}};
+                                    .hist_ratio = 0.8},
+    .classifier_select_my_team = {.ranges_col = {749, 1179},
+                                  .ranges_row = {237, 859},
+                                  .hist_channel = 2,
+                                  .hist_bins = 8,
+                                  .hist_max_index = 7,
+                                  .hist_ratio = 0.5}};
 
 struct pokemon_detector_sv_context;
 

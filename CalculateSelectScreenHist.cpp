@@ -12,9 +12,7 @@ static void calcHist(const cv::Mat &input, cv::Mat &hist) {
 
 int main(int argc, const char **argv) {
   const std::vector<std::string> screenPaths(&argv[1], &argv[argc]);
-//  const cv::Range colRange(149, 811), rowRange(139, 842);
-//  const cv::Range colRange(1229, 1649), rowRange(227, 836);
-  const cv::Range colRange(100, 200), rowRange(100, 200);
+  const cv::Range colRange(749, 1179), rowRange(237, 859);
 
   for (std::string imagePath : screenPaths) {
     const cv::Mat screen = cv::imread(imagePath);

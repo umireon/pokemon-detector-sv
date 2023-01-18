@@ -25,7 +25,8 @@ extern "C" struct pokemon_detector_sv_context {
   pokemon_detector_sv_context(const struct pokemon_detector_sv_config config)
       : config(config), sceneDetector(config.classifier_lobby_my_select,
                                       config.classifier_lobby_opponent_select,
-                                      config.classifier_black_transition),
+                                      config.classifier_black_transition,
+                                      config.classifier_select_my_team),
         opponentPokemonsCropper(
             convertInt2ToStdArray2(config.opponent_col_range),
             convertInt62ToStdArray62(config.opponent_row_range)),
