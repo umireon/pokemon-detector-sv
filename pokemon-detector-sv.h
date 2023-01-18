@@ -106,9 +106,6 @@ const char *pokemon_detector_sv_recognize_opponent_pokemon(
 int pokemon_detector_sv_recognize_selection_order(
     struct pokemon_detector_sv_context *context, int index);
 
-extern "C" void pokemon_detector_sv_export_image_selection_order(
-    struct pokemon_detector_sv_context *context, int index, const char *path);
-
 void pokemon_detector_sv_selection_order_crop(
     struct pokemon_detector_sv_context *context);
 int pokemon_detector_sv_selection_order_recognize(
