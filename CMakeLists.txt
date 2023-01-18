@@ -9,6 +9,7 @@ ExternalProject_Add(OpenCVDownload
         URL https://github.com/opencv/opencv/archive/refs/tags/4.7.0.tar.gz
         BUILD_BYPRODUCTS
             <INSTALL_DIR>/lib/libopencv_core.a
+            <INSTALL_DIR>/lib/libopencv_features2d.a
             <INSTALL_DIR>/lib/libopencv_imgcodecs.a
             <INSTALL_DIR>/lib/libopencv_imgproc.a
             <INSTALL_DIR>/lib/opencv4/3rdparty/liblibpng.a
@@ -45,7 +46,7 @@ ExternalProject_Add(OpenCVDownload
             -DBUILD_opencv_calib3d=OFF
             -DBUILD_opencv_core=ON
             -DBUILD_opencv_dnn=OFF
-            -DBUILD_opencv_features2d=OFF
+            -DBUILD_opencv_features2d=ON
             -DBUILD_opencv_flann=OFF
             -DBUILD_opencv_gapi=OFF
             -DBUILD_opencv_highgui=OFF
@@ -88,6 +89,9 @@ ExternalProject_Get_Property(OpenCVDownload INSTALL_DIR)
 add_library(OpenCV::Core STATIC IMPORTED)
 set_target_properties(OpenCV::Core PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/libopencv_core${CMAKE_STATIC_LIBRARY_SUFFIX})
 
+add_library(OpenCV::Features2d STATIC IMPORTED)
+set_target_properties(OpenCV::Features2d PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/libopencv_features2d${CMAKE_STATIC_LIBRARY_SUFFIX})
+
 add_library(OpenCV::Imgcodecs STATIC IMPORTED)
 set_target_properties(OpenCV::Imgcodecs PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/libopencv_imgcodecs${CMAKE_STATIC_LIBRARY_SUFFIX})
 
@@ -102,6 +106,7 @@ set_target_properties(OpenCV::Zlib PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/l
 
 set_target_properties(
         OpenCV::Core
+        OpenCV::Features2d
         OpenCV::Imgcodecs
         OpenCV::Imgproc
         OpenCV::Libpng
@@ -112,6 +117,7 @@ set_target_properties(
 add_library(OpenCV INTERFACE)
 target_link_libraries(OpenCV INTERFACE
         OpenCV::Core
+        OpenCV::Features2d
         OpenCV::Imgcodecs
         OpenCV::Imgproc
         OpenCV::Libpng
@@ -123,6 +129,7 @@ endif(APPLE)
 
 install(FILES
         $<TARGET_PROPERTY:OpenCV::Core,IMPORTED_LOCATION>
+        $<TARGET_PROPERTY:OpenCV::Features2d,IMPORTED_LOCATION>
         $<TARGET_PROPERTY:OpenCV::Imgcodecs,IMPORTED_LOCATION>
         $<TARGET_PROPERTY:OpenCV::Imgproc,IMPORTED_LOCATION>
         $<TARGET_PROPERTY:OpenCV::Libpng,IMPORTED_LOCATION>
@@ -135,6 +142,8 @@ add_library(pokemon-detector-sv STATIC)
 target_sources(pokemon-detector-sv PRIVATE
         pokemon-detector-sv.cpp
         SceneDetector.cpp
+        PokemonRecognizer.cpp
+        PokemonRecognizerGenerated.cpp
         PUBLIC FILE_SET
         HEADERS BASE_DIRS ${PROJECT_SOURCE_DIR} FILES pokemon-detector-sv.h)
 target_link_libraries(pokemon-detector-sv OpenCV)
@@ -144,5 +153,17 @@ target_link_libraries(pokemon-detector-sv-exe OpenCV)
 
 add_executable(CalculateSelectScreenHist CalculateSelectScreenHist.cpp SceneDetector.cpp)
 target_link_libraries(CalculateSelectScreenHist OpenCV)
+
+add_executable(AKAZETest AKAZETest.cpp)
+target_link_libraries(AKAZETest OpenCV)
+
+add_executable(CalculatePokemonHist CalculatePokemonHist.cpp)
+target_link_libraries(CalculatePokemonHist OpenCV)
+
+add_executable(PokemonRecognizerTrain PokemonRecognizerTrain.cpp)
+target_link_libraries(PokemonRecognizerTrain OpenCV)
+
+add_executable(PokemonRecognizerBench PokemonRecognizerBench.cpp PokemonRecognizer.cpp PokemonRecognizerGenerated.cpp)
+target_link_libraries(PokemonRecognizerBench OpenCV)
 
 install(TARGETS pokemon-detector-sv FILE_SET HEADERS)
