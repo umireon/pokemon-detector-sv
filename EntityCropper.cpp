@@ -13,7 +13,7 @@ void EntityCropper::crop(const cv::Mat &screenBGRA) {
     cv::floodFill(imagesBGR[i], mask, seedPoint, 0, 0, 0, 0,
                   cv::FLOODFILL_MASK_ONLY);
     cv::Range maskCropCol(1, mask.cols - 1), maskCropRow(1, mask.rows - 1);
-    masks[i] = mask(maskCropCol, maskCropRow);
+    masks[i] = 1 - mask(maskCropCol, maskCropRow);
 
     for (int y = 0; y < imagesBGRA[i].rows; y++) {
       for (int x = 0; x < imagesBGRA[i].cols; x++) {
