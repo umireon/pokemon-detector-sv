@@ -117,10 +117,10 @@ extern "C" void pokemon_detector_sv_my_selection_order_crop(
 
 extern "C" int pokemon_detector_sv_my_selection_order_recognize(
     struct pokemon_detector_sv_context *context, int index) {
-  context->matchstate.my_selection_order[index] =
-      context->selectionOrderRecognizer.recognizeSelection(
-          context->selectionOrderCropper.imagesBGR[index]);
-  return context->matchstate.my_selection_order[index];
+  auto order = context->selectionOrderRecognizer.recognizeSelection(
+      context->selectionOrderCropper.imagesBGR[index]);
+  context->matchstate.my_selection_order[index] = order;
+  return order;
 }
 
 extern "C" void pokemon_detector_sv_my_selection_order_export_image(
@@ -140,16 +140,20 @@ pokemon_detector_sv_result_crop(struct pokemon_detector_sv_context *context) {
 
 extern "C" enum pokemon_detector_sv_result pokemon_detector_sv_result_recognize(
     struct pokemon_detector_sv_context *context) {
-  context->matchstate.result = context->resultRecognizer.recognizeResult(
+  auto result = context->resultRecognizer.recognizeResult(
       context->resultCropper.imagesBGR[0]);
-  return context->matchstate.result;
+  context->matchstate.result = result;
+  return result;
 }
 
-extern "C" void pokemon_detector_sv_matchstate_clear(struct pokemon_detector_sv_context *context) {
+extern "C" void pokemon_detector_sv_matchstate_clear(
+    struct pokemon_detector_sv_context *context) {
   auto &matchstate = context->matchstate;
   matchstate.result = POKEMON_DETECTOR_SV_RESULT_UNKNOWN;
-  std::memset(matchstate.my_selection_order, 0, sizeof(matchstate.my_selection_order));
-  std::memset(matchstate.opponent_pokemon_ids, 0, sizeof(matchstate.opponent_pokemon_ids));
+  std::memset(matchstate.my_selection_order, 0,
+              sizeof(matchstate.my_selection_order));
+  std::memset(matchstate.opponent_pokemon_ids, 0,
+              sizeof(matchstate.opponent_pokemon_ids));
 }
 
 extern "C" void pokemon_detector_sv_matchstate_append(
