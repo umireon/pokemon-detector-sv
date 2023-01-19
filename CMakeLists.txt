@@ -20,6 +20,7 @@ ExternalProject_Add(o
             <INSTALL_DIR>/lib/opencv4/3rdparty/libzlib${CMAKE_STATIC_LIBRARY_SUFFIX}
         CMAKE_GENERATOR Ninja
         CMAKE_ARGS
+            -DOPENCV_FORCE_3RDPARTY_BUILD=ON
             -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13
             -DBUILD_SHARED_LIBS=OFF
             -DBUILD_opencv_apps=OFF
