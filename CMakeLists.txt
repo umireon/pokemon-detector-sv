@@ -8,6 +8,10 @@ set(CMAKE_CXX_STANDARD 11)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+if(APPLE)
+    set(CMAKE_GENERATOR Ninja)
+endif(APPLE)
+
 ExternalProject_Add(o
         URL https://github.com/umireon/opencv/archive/refs/heads/4.x.tar.gz
         BUILD_BYPRODUCTS
@@ -17,6 +21,7 @@ ExternalProject_Add(o
             <INSTALL_DIR>/lib/libopencv_imgproc${CMAKE_STATIC_LIBRARY_SUFFIX}
             <INSTALL_DIR>/lib/opencv4/3rdparty/liblibpng${CMAKE_STATIC_LIBRARY_SUFFIX}
             <INSTALL_DIR>/lib/opencv4/3rdparty/libzlib${CMAKE_STATIC_LIBRARY_SUFFIX}
+        CMAKE_GENERATOR ${CMAKE_GENERATOR}
         CMAKE_ARGS
             -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
             -DCMAKE_BUILD_TYPE=Release
