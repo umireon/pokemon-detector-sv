@@ -1,20 +1,20 @@
 #include "SelectionRecognizer.h"
-
-static constexpr int NORMALIZED_HEIGHT = 98;
-static constexpr int DESCRIPTOR_SIZE = 64;
-static constexpr int UNRECOGNIZED_THRESHOLD = 10;
+#include <iostream>
+static constexpr int UNRECOGNIZED_THRESHOLD = 100;
 
 int SelectionRecognizer::recognizeSelection(const cv::Mat &imageBGR) {
   cv::Mat scaledBGR;
-  cv::resize(imageBGR, scaledBGR,
-             cv::Size(imageBGR.cols * NORMALIZED_HEIGHT / imageBGR.rows,
+  cv::cvtColor(imageBGR, scaledBGR, cv::COLOR_BGR2GRAY);
+  cv::resize(scaledBGR, scaledBGR,
+             cv::Size(imageBGR.rows * NORMALIZED_HEIGHT / imageBGR.cols,
                       NORMALIZED_HEIGHT));
 
   std::vector<cv::KeyPoint> targetKeyPoints;
   cv::Mat targetDescriptors;
   auto algorithm =
       cv::AKAZE::create(cv::AKAZE::DESCRIPTOR_MLDB, DESCRIPTOR_SIZE);
-  algorithm->detectAndCompute(scaledBGR, cv::Mat(), targetKeyPoints,
+  cv::Mat mask = cv::Mat::ones(scaledBGR.rows, scaledBGR.cols, CV_8U);
+  algorithm->detectAndCompute(scaledBGR, mask, targetKeyPoints,
                               targetDescriptors);
 
   auto matcher = cv::DescriptorMatcher::create("BruteForce");

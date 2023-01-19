@@ -1,7 +1,7 @@
 #include <opencv2/opencv.hpp>
 
 #include "EntityCropper.h"
-
+#include <iostream>
 void EntityCropper::crop(const cv::Mat &screenBGRA) {
   for (int i = 0; i < 6; i++) {
     const cv::Range colRange(rangeCol[0], rangeCol[1]),

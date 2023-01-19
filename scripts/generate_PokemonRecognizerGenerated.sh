@@ -2,6 +2,7 @@
 set -euo pipefail
 descriptor_size=16
 normalized_height=98
+threshold=-1
 rows=$(($descriptor_size / 8))
 (
     printf '%s\n' '#include <vector>'
@@ -16,7 +17,7 @@ rows=$(($descriptor_size / 8))
     printf '%s\n' '};'
 
     printf '%s' 'static const std::vector<std::vector<uchar>> DATA = '
-    ./cmake-build-debug/AkAZETrainer $descriptor_size $normalized_height ./train/PokemonRecognizer/*.png
+    ./cmake-build-debug/AkAZETrainer $descriptor_size $normalized_height $threshold ./train/PokemonRecognizer/*.png
     printf '%s\n' ';'
 
     printf '%s' 'const std::vector<cv::Mat> PokemonRecognizer::POKEMON_DESCRIPTORS = {'

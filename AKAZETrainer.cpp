@@ -18,7 +18,8 @@ int main(int argc, const char **argv) {
 
   const auto descriptorSize = std::stoi(argv[1]);
   const auto height = std::stoi(argv[2]);
-  const std::vector<std::string> paths(&argv[3], &argv[argc]);
+  const int threshold = std::stoi(argv[3]);
+  const std::vector<std::string> paths(&argv[4], &argv[argc]);
   auto algorithm =
       cv::AKAZE::create(cv::AKAZE::DESCRIPTOR_MLDB, descriptorSize);
 
@@ -30,14 +31,19 @@ int main(int argc, const char **argv) {
     if (image.rows == height) {
       scaledImage = image;
     } else {
-      cv::resize(image, scaledImage, cv::Size(image.cols * height / image.rows, height));
+      cv::resize(image, scaledImage, cv::Size(image.rows * height / image.cols, height));
     }
-    cv::Mat imageBGR, mask = extractMaskFromBGRA(scaledImage);
-    cv::cvtColor(scaledImage, imageBGR, cv::COLOR_BGRA2BGR);
+    cv::Mat targetImage, mask = extractMaskFromBGRA(scaledImage);
+    if (threshold == -1) {
+      cv::cvtColor(scaledImage, targetImage, cv::COLOR_BGRA2BGR);
+    } else {
+      cv::cvtColor(scaledImage, targetImage, cv::COLOR_BGRA2GRAY);
+      cv::threshold(targetImage, targetImage, threshold, 255, cv::THRESH_BINARY);
+    }
 
     std::vector<cv::KeyPoint> keyPoints;
     cv::Mat descriptors;
-    algorithm->detectAndCompute(imageBGR, mask, keyPoints, descriptors);
+    algorithm->detectAndCompute(targetImage, mask, keyPoints, descriptors);
     descriptorsVector.push_back(descriptors);
   }
 

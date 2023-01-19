@@ -1,10 +1,10 @@
 #include "EntityCropper.h"
-
+#include <iostream>
 int main(int argc, const char **argv) {
   const std::vector<std::string> paths(&argv[1], &argv[argc]);
-  const std::array<int, 2> rangeCol{774, 926};
+  const std::array<int, 2> rangeCol{795, 827};
   const std::array<std::array<int, 2>, 6> rangesRow{
-      147, 196, 263, 312, 379, 428, 495, 544, 611, 660, 727, 776,
+      154, 186, 271, 303, 388, 420, 503, 535, 619, 651, 735, 767,
   };
   for (auto path : paths) {
     cv::Mat screenBGR = cv::imread(path, cv::IMREAD_COLOR), screenBGRA;
@@ -12,6 +12,7 @@ int main(int argc, const char **argv) {
     EntityCropper cropper(rangeCol, rangesRow);
     cropper.crop(screenBGRA);
     for (int i = 0; i < cropper.imagesBGRA.size(); i++) {
+      std::cout << cropper.imagesBGRA[i].size;
       cv::imwrite(path + "-" + std::to_string(i) + ".png",
                   cropper.imagesBGRA[i]);
     }
