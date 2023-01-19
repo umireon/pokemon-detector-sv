@@ -5,6 +5,10 @@ set(CMAKE_CXX_STANDARD 17)
 
 include(ExternalProject)
 
+if(APPLE)
+    set(apple_args -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES})
+endif(APPLE)
+
 ExternalProject_Add(o
         URL https://github.com/opencv/opencv/archive/refs/tags/4.7.0.tar.gz
         BUILD_BYPRODUCTS
@@ -84,6 +88,7 @@ ExternalProject_Add(o
             -DWITH_ITT=OFF
             -DWITH_OPENCL=OFF
             -DWITH_IPP=OFF
+            ${apple_args}
         )
 
 ExternalProject_Get_Property(o INSTALL_DIR)
