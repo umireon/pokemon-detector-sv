@@ -148,9 +148,9 @@ target_sources(pokemon-detector-sv PRIVATE
         EntityCropper.cpp
         SelectionRecognizer.cpp
         SelectionRecognizerGenerated.cpp
-        ResultRecognizer.cpp
-        PUBLIC FILE_SET
-        HEADERS BASE_DIRS ${PROJECT_SOURCE_DIR} FILES pokemon-detector-sv.h)
+        ResultRecognizer.cpp)
+
+install(FILES ${PROJECT_SOURCE_DIR}/pokemon-detector-sv.h TYPE INCLUDE)
 target_link_libraries(pokemon-detector-sv OpenCV)
 
 add_executable(pokemon-detector-sv-exe main.cpp)
