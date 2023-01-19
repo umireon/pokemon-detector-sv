@@ -4,7 +4,7 @@ project(pokemon-detector-sv)
 include(ExternalProject)
 
 string(REPLACE ";" "$<SEMICOLON>" CMAKE_OSX_ARCHITECTURES_ "${CMAKE_OSX_ARCHITECTURES}")
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
@@ -17,7 +17,6 @@ ExternalProject_Add(o
             <INSTALL_DIR>/lib/libopencv_imgproc${CMAKE_STATIC_LIBRARY_SUFFIX}
             <INSTALL_DIR>/lib/opencv4/3rdparty/liblibpng${CMAKE_STATIC_LIBRARY_SUFFIX}
             <INSTALL_DIR>/lib/opencv4/3rdparty/libzlib${CMAKE_STATIC_LIBRARY_SUFFIX}
-        CMAKE_GENERATOR Ninja
         CMAKE_ARGS
             -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
             -DCMAKE_BUILD_TYPE=Release

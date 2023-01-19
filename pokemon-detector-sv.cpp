@@ -1,4 +1,3 @@
-#include <filesystem>
 #include <fstream>
 
 #include <opencv2/opencv.hpp>
@@ -92,11 +91,12 @@ extern "C" void pokemon_detector_sv_opponent_pokemon_crop(
   context->opponentPokemonCropper.generateMask();
 }
 
+const char PATH_SEPARATOR = '/';
+
 extern "C" void pokemon_detector_sv_opponent_pokemon_export_image(
     struct pokemon_detector_sv_context *context, int index, const char *basedir,
     const char *filename) {
-  std::filesystem::path filepath(basedir);
-  filepath /= filename;
+  std::string b(basedir), f(filename), filepath = b + PATH_SEPARATOR + f;
   cv::imwrite(filepath.c_str(),
               context->opponentPokemonCropper.imagesBGRA[index]);
 }
