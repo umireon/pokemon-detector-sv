@@ -115,6 +115,11 @@ extern "C" int pokemon_detector_sv_selection_order_recognize(
 }
 
 extern "C" void pokemon_detector_sv_selection_order_export(
-    struct pokemon_detector_sv_context *context, int index, const char *path) {
-  cv::imwrite(path, context->selectionOrderCropper.imagesBGRA[index]);
+    struct pokemon_detector_sv_context *context, int index, const char *path,
+    bool shouldBeBlank) {
+  cv::Mat image = context->selectionOrderCropper.imagesBGRA[index]);
+  if (shouldBeBlank) {
+    image *= 0;
+  }
+  cv::imwrite(path, image);
 }

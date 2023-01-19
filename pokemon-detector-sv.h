@@ -111,7 +111,8 @@ void pokemon_detector_sv_selection_order_crop(
 int pokemon_detector_sv_selection_order_recognize(
     struct pokemon_detector_sv_context *context, int index);
 void pokemon_detector_sv_selection_order_export(
-    struct pokemon_detector_sv_context *context, int index, const char *path);
+    struct pokemon_detector_sv_context *context, int index, const char *path,
+    bool shouldBeBlank);
 
 #ifdef __cplusplus
 }
