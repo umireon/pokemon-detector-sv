@@ -2,9 +2,8 @@
 #include <iostream>
 int main(int argc, const char **argv) {
   const std::vector<std::string> paths(&argv[1], &argv[argc]);
-  const std::array<int, 2> rangeCol{795, 827};
-  const std::array<std::array<int, 2>, 6> rangesRow{
-      154, 186, 271, 303, 388, 420, 503, 535, 619, 651, 735, 767};
+  const std::array<int, 2> rangeCol{483, 697};
+  const std::vector<std::array<int, 2>> rangesRow{{958, 1039}};
 
   for (auto path : paths) {
     cv::Mat screenBGR = cv::imread(path, cv::IMREAD_COLOR), screenBGRA;

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
-descriptor_size=64
-normalized_height=256
+descriptor_size=16
+normalized_height=128
 binary_threshold=200
 rows=$(($descriptor_size / 8))
 (
@@ -15,12 +15,7 @@ rows=$(($descriptor_size / 8))
     printf '%s' 'const std::vector<int> SelectionRecognizer::SELECTION_INDEX = {'
     for name in $(basename -s .png ./train/SelectionRecognizer/*.png)
     do
-      if [[ ${name: -1} == 0 ]]
-      then
-        printf '%s' -1,
-      else
-        printf '%s' ${name: -1},
-      fi
+      printf '%s' ${name: -1},
     done
     printf '%s\n' '};'
 

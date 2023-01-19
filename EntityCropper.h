@@ -6,16 +6,18 @@
 
 class EntityCropper {
 public:
-  std::array<cv::Mat, 6> imagesBGR;
-  std::array<cv::Mat, 6> imagesBGRA;
-  std::array<cv::Mat, 6> masks;
+  std::vector<cv::Mat> imagesBGR;
+  std::vector<cv::Mat> imagesBGRA;
+  std::vector<cv::Mat> masks;
   const std::array<int, 2> rangeCol;
-  const std::array<std::array<int, 2>, 6> rangesRow;
+  const std::vector<std::array<int, 2>> rangesRow;
   cv::Point seedPoint;
 
   EntityCropper(const std::array<int, 2> rangeCol,
-                const std::array<std::array<int, 2>, 6> rangesRow)
-      : rangeCol(rangeCol), rangesRow(rangesRow), seedPoint(0, 0) {}
+                const std::vector<std::array<int, 2>> rangesRow)
+      : imagesBGR(rangesRow.size()), imagesBGRA(rangesRow.size()),
+        masks(rangesRow.size()), rangeCol(rangeCol), rangesRow(rangesRow),
+        seedPoint(0, 0) {}
   void crop(const cv::Mat &screenBGRA);
   void generateMask(void);
 };

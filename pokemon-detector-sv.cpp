@@ -12,9 +12,9 @@ convertInt2ToStdArray2(const int cArray[2]) {
   return std::array<int, 2>{cArray[0], cArray[1]};
 }
 
-static constexpr std::array<std::array<int, 2>, 6>
-convertInt62ToStdArray62(const int cArray[6][2]) {
-  return std::array<std::array<int, 2>, 6>{
+static const std::vector<std::array<int, 2>>
+convertInt62ToVector6Array2(const int cArray[6][2]) {
+  return std::vector<std::array<int, 2>>{
       convertInt2ToStdArray2(cArray[0]), convertInt2ToStdArray2(cArray[1]),
       convertInt2ToStdArray2(cArray[2]), convertInt2ToStdArray2(cArray[3]),
       convertInt2ToStdArray2(cArray[4]), convertInt2ToStdArray2(cArray[5]),
@@ -29,10 +29,10 @@ extern "C" struct pokemon_detector_sv_context {
                                       config.classifier_select_my_team),
         opponentPokemonsCropper(
             convertInt2ToStdArray2(config.opponent_col_range),
-            convertInt62ToStdArray62(config.opponent_row_range)),
+            convertInt62ToVector6Array2(config.opponent_row_range)),
         selectionOrderCropper(
             convertInt2ToStdArray2(config.selection_order_range_col),
-            convertInt62ToStdArray62(config.selection_order_range_row)) {}
+            convertInt62ToVector6Array2(config.selection_order_range_row)) {}
 
   const struct pokemon_detector_sv_config config;
   cv::Mat screenBGRA, screenBGR, screenHSV;
