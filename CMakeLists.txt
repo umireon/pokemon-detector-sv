@@ -7,9 +7,6 @@ if(APPLE)
     set(apple_args -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES})
 endif(APPLE)
 
-set(CMAKE_C_COMPILER clang)
-set(CMAKE_CXX_COMPILER clang++)
-
 ExternalProject_Add(o
         URL https://github.com/umireon/opencv/archive/refs/heads/4.x.tar.gz
         BUILD_BYPRODUCTS
@@ -23,8 +20,6 @@ ExternalProject_Add(o
         CMAKE_ARGS
             -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
             -DCMAKE_BUILD_TYPE=Release
-            -DCMAKE_C_COMPILER=clang
-            -DCMAKE_CXX_COMPILER=clang++
             -DOPENCV_FORCE_3RDPARTY_BUILD=ON
             -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13
             -DBUILD_SHARED_LIBS=OFF
