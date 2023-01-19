@@ -89,7 +89,7 @@ const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
 struct pokemon_detector_sv_matchstate {
   enum pokemon_detector_sv_result result;
   int my_selection_order[6];
-  char *opponent_pokemon_ids[6];
+  const char *opponent_pokemon_ids[6];
 };
 
 struct pokemon_detector_sv_context;
