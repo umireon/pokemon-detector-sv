@@ -3,9 +3,7 @@ project(pokemon-detector-sv)
 
 include(ExternalProject)
 
-if(APPLE)
-    set(apple_args -DCMAKE_OSX_ARCHITECTURES="${CMAKE_OSX_ARCHITECTURES}")
-endif(APPLE)
+string(REPLACE ";" "$<SEMICOLON>" CMAKE_OSX_ARCHITECTURES_ "${CMAKE_OSX_ARCHITECTURES}")
 
 ExternalProject_Add(o
         URL https://github.com/umireon/opencv/archive/refs/heads/4.x.tar.gz
@@ -87,7 +85,7 @@ ExternalProject_Add(o
             -DWITH_ITT=OFF
             -DWITH_OPENCL=OFF
             -DWITH_IPP=OFF
-            ${apple_args}
+            -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES_}
         )
 
 ExternalProject_Get_Property(o INSTALL_DIR)
