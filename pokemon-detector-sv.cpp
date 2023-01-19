@@ -1,4 +1,5 @@
 #include <filesystem>
+#include <fstream>
 
 #include <opencv2/opencv.hpp>
 
@@ -30,7 +31,7 @@ extern "C" struct pokemon_detector_sv_context {
                                       config.classifier_lobby_opponent_select,
                                       config.classifier_black_transition,
                                       config.classifier_select_my_team),
-        opponentPokemonsCropper(
+        opponentPokemonCropper(
             convertInt2ToStdArray2(config.opponent_col_range),
             convertInt62ToVector6Array2(config.opponent_row_range)),
         selectionOrderCropper(
@@ -44,14 +45,18 @@ extern "C" struct pokemon_detector_sv_context {
                          config.result_win_max_index) {}
 
   const struct pokemon_detector_sv_config config;
+  struct pokemon_detector_sv_matchstate matchstate;
+
   cv::Mat screenBGRA, screenBGR, screenHSV;
+
   SceneDetector sceneDetector;
-  EntityCropper opponentPokemonsCropper;
+
+  EntityCropper opponentPokemonCropper;
   PokemonRecognizer pokemonRecognizer;
-  std::array<std::string, 6> opponentPokemonIds;
+
   EntityCropper selectionOrderCropper;
-  SelectionRecognizer selectionRecognizer;
-  std::array<int, 6> selectionOrderIndex;
+  SelectionRecognizer selectionOrderRecognizer;
+
   EntityCropper resultCropper;
   ResultRecognizer resultRecognizer;
 };
@@ -80,50 +85,45 @@ pokemon_detector_sv_detect_scene(struct pokemon_detector_sv_context *context) {
   return context->sceneDetector.detectScene(screenHSV);
 }
 
-extern "C" void pokemon_detector_sv_crop_opponent_pokemons(
+extern "C" void pokemon_detector_sv_opponent_pokemon_crop(
     struct pokemon_detector_sv_context *context) {
-  context->opponentPokemonsCropper.crop(context->screenBGRA);
-  context->opponentPokemonsCropper.generateMask();
+  context->opponentPokemonCropper.crop(context->screenBGRA);
+  context->opponentPokemonCropper.generateMask();
 }
 
-extern "C" void pokemon_detector_sv_export_opponent_pokemon_image(
+extern "C" void pokemon_detector_sv_opponent_pokemon_export_image(
     struct pokemon_detector_sv_context *context, int index, const char *basedir,
     const char *filename) {
   std::filesystem::path filepath(basedir);
   filepath /= filename;
   cv::imwrite(filepath.c_str(),
-              context->opponentPokemonsCropper.imagesBGRA[index]);
+              context->opponentPokemonCropper.imagesBGRA[index]);
 }
 
-extern "C" const char *pokemon_detector_sv_recognize_opponent_pokemon(
+extern "C" const char *pokemon_detector_sv_opponent_pokemon_recognize(
     struct pokemon_detector_sv_context *context, int index) {
-  context->opponentPokemonIds[index] =
-      context->pokemonRecognizer.recognizePokemon(
-          context->opponentPokemonsCropper.imagesBGR[index],
-          context->opponentPokemonsCropper.masks[index]);
-  return context->opponentPokemonIds[index].data();
+  auto id = context->pokemonRecognizer.recognizePokemon(
+      context->opponentPokemonCropper.imagesBGR[index],
+      context->opponentPokemonCropper.masks[index]);
+  id.copy(context->matchstate.opponent_pokemon_ids[index],
+          sizeof(context->matchstate.opponent_pokemon_ids[0]) - 1);
+  return context->matchstate.opponent_pokemon_ids[index];
 }
 
-extern "C" void pokemon_detector_sv_crop_my_team_pokemons(
-    struct pokemon_detector_sv_context *context) {
-  context->selectionOrderCropper.crop(context->screenBGRA);
-  context->selectionOrderCropper.generateMask();
-}
-
-extern "C" void pokemon_detector_sv_selection_order_crop(
+extern "C" void pokemon_detector_sv_my_selection_order_crop(
     struct pokemon_detector_sv_context *context) {
   context->selectionOrderCropper.crop(context->screenBGRA);
 }
 
-extern "C" int pokemon_detector_sv_selection_order_recognize(
+extern "C" int pokemon_detector_sv_my_selection_order_recognize(
     struct pokemon_detector_sv_context *context, int index) {
-  context->selectionOrderIndex[index] =
-      context->selectionRecognizer.recognizeSelection(
+  context->matchstate.my_selection_order[index] =
+      context->selectionOrderRecognizer.recognizeSelection(
           context->selectionOrderCropper.imagesBGR[index]);
-  return context->selectionOrderIndex[index];
+  return context->matchstate.my_selection_order[index];
 }
 
-extern "C" void pokemon_detector_sv_selection_order_export(
+extern "C" void pokemon_detector_sv_my_selection_order_export_image(
     struct pokemon_detector_sv_context *context, int index, const char *path,
     bool shouldBeBlank) {
   cv::Mat image = context->selectionOrderCropper.imagesBGRA[index];
@@ -140,6 +140,35 @@ pokemon_detector_sv_result_crop(struct pokemon_detector_sv_context *context) {
 
 extern "C" enum pokemon_detector_sv_result pokemon_detector_sv_result_recognize(
     struct pokemon_detector_sv_context *context) {
-  return context->resultRecognizer.recognizeResult(
+  context->matchstate.result = context->resultRecognizer.recognizeResult(
       context->resultCropper.imagesBGR[0]);
+  return context->matchstate.result;
+}
+
+extern "C" void pokemon_detector_sv_matchstate_clear(struct pokemon_detector_sv_context *context) {
+  auto &matchstate = context->matchstate;
+  matchstate.result = POKEMON_DETECTOR_SV_RESULT_UNKNOWN;
+  std::memset(matchstate.my_selection_order, 0, sizeof(matchstate.my_selection_order));
+  std::memset(matchstate.opponent_pokemon_ids, 0, sizeof(matchstate.opponent_pokemon_ids));
+}
+
+extern "C" void pokemon_detector_sv_matchstate_append(
+    struct pokemon_detector_sv_context *context, const char *filepath) {
+  std::ofstream ofs(filepath, std::ios_base::app);
+  auto &matchstate = context->matchstate;
+  if (matchstate.result == POKEMON_DETECTOR_SV_RESULT_UNKNOWN) {
+    ofs << "UNKNOWN";
+  } else if (matchstate.result == POKEMON_DETECTOR_SV_RESULT_LOSE) {
+    ofs << "LOSE";
+  } else if (matchstate.result == POKEMON_DETECTOR_SV_RESULT_WIN) {
+    ofs << "WIN";
+  }
+  ofs << "\t";
+  for (int i = 0; i < 6; i++) {
+    ofs << matchstate.my_selection_order[i] << "\t";
+  }
+  for (int i = 0; i < 6; i++) {
+    ofs << matchstate.opponent_pokemon_ids[i] << "\t";
+  }
+  ofs << "\n";
 }

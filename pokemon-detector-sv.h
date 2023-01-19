@@ -86,6 +86,12 @@ const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
     .result_win_max_index = 2,
     .result_win_ratio = 0.3};
 
+struct pokemon_detector_sv_matchstate {
+  enum pokemon_detector_sv_result result;
+  int my_selection_order[6];
+  char opponent_pokemon_ids[6][16];
+};
+
 struct pokemon_detector_sv_context;
 
 struct pokemon_detector_sv_context *
@@ -100,29 +106,36 @@ void pokemon_detector_sv_load_screen(
 enum pokemon_detector_sv_scene
 pokemon_detector_sv_detect_scene(struct pokemon_detector_sv_context *context);
 
-void pokemon_detector_sv_crop_opponent_pokemons(
+void pokemon_detector_sv_opponent_pokemon_crop(
     struct pokemon_detector_sv_context *context);
 
-void pokemon_detector_sv_export_opponent_pokemon_image(
+void pokemon_detector_sv_opponent_pokemon_export_image(
     struct pokemon_detector_sv_context *context, int index, const char *basedir,
     const char *filename);
 
-const char *pokemon_detector_sv_recognize_opponent_pokemon(
+const char *pokemon_detector_sv_opponent_pokemon_recognize(
     struct pokemon_detector_sv_context *context, int index);
 
 int pokemon_detector_sv_recognize_selection_order(
     struct pokemon_detector_sv_context *context, int index);
 
-void pokemon_detector_sv_selection_order_crop(
+void pokemon_detector_sv_my_selection_order_crop(
     struct pokemon_detector_sv_context *context);
-int pokemon_detector_sv_selection_order_recognize(
+int pokemon_detector_sv_my_selection_order_recognize(
     struct pokemon_detector_sv_context *context, int index);
-void pokemon_detector_sv_selection_order_export(
+void pokemon_detector_sv_my_selection_order_export_image(
     struct pokemon_detector_sv_context *context, int index, const char *path,
     bool shouldBeBlank);
 
-enum pokemon_detector_sv_result pokemon_detector_sv_recognize_result(
+void pokemon_detector_sv_result_crop(
     struct pokemon_detector_sv_context *context);
+enum pokemon_detector_sv_result pokemon_detector_sv_result_recognize(
+    struct pokemon_detector_sv_context *context);
+
+void pokemon_detector_sv_matchstate_clear(
+    struct pokemon_detector_sv_context *context);
+void pokemon_detector_sv_matchstate_append(
+    struct pokemon_detector_sv_context *context, const char *filepath);
 
 #ifdef __cplusplus
 }
