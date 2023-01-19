@@ -13,6 +13,6 @@ int main(int argc, const char **argv) {
   cv::Mat imageBGR;
   cv::cvtColor(imageBGRA, imageBGR, cv::COLOR_BGRA2BGR);
 
-  ResultRecognizer resultRecognizer(16, 11, 0.3, 1, 11);
+  ResultRecognizer resultRecognizer(16, 11, 0.3, 1, 0.3);
   std::cout << resultRecognizer.recognizeResult(imageBGR) << std::endl;
 }

@@ -43,7 +43,7 @@ extern "C" struct pokemon_detector_sv_context {
                           convertInt2ToStdArray2(config.result_range_row[0])}),
         resultRecognizer(config.result_n_bins, config.result_lose_max_index,
                          config.result_lose_ratio, config.result_win_max_index,
-                         config.result_win_max_index) {}
+                         config.result_win_ratio) {}
 
   const struct pokemon_detector_sv_config config;
 
