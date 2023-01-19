@@ -10,6 +10,12 @@ enum pokemon_detector_sv_scene {
   POKEMON_DETECTOR_SV_SCENE_BLACK_TRANSITION
 };
 
+enum pokemon_detector_sv_result {
+  POKEMON_DETECTOR_SV_RESULT_UNKNOWN,
+  POKEMON_DETECTOR_SV_RESULT_LOSE,
+  POKEMON_DETECTOR_SV_RESULT_WIN
+};
+
 struct pokemon_detector_sv_hist_classifier {
   const int range_col[2];
   const int range_row[2];
@@ -29,6 +35,14 @@ struct pokemon_detector_sv_config {
       classifier_lobby_opponent_select;
   const struct pokemon_detector_sv_hist_classifier classifier_black_transition;
   const struct pokemon_detector_sv_hist_classifier classifier_select_my_team;
+
+  const int result_range_col[2];
+  const int result_range_row[1][2];
+  const int result_n_bins;
+  const int result_lose_max_index;
+  const double result_lose_ratio;
+  const int result_win_max_index;
+  const double result_win_ratio;
 };
 
 const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
@@ -63,7 +77,14 @@ const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
                                     .hist_channel = 2,
                                     .hist_bins = 8,
                                     .hist_max_index = 0,
-                                    .hist_ratio = 0.8}};
+                                    .hist_ratio = 0.8},
+    .result_range_col = {483, 697},
+    .result_range_row = {{958, 1039}},
+    .result_n_bins = 16,
+    .result_lose_max_index = 11,
+    .result_lose_ratio = 0.3,
+    .result_win_max_index = 2,
+    .result_win_ratio = 0.3};
 
 struct pokemon_detector_sv_context;
 
@@ -73,8 +94,8 @@ pokemon_detector_sv_create(const struct pokemon_detector_sv_config config);
 void pokemon_detector_sv_destroy(struct pokemon_detector_sv_context *context);
 
 void pokemon_detector_sv_load_screen(
-    struct pokemon_detector_sv_context *context, void *buf_bgra,
-    int width, int height);
+    struct pokemon_detector_sv_context *context, void *buf_bgra, int width,
+    int height);
 
 enum pokemon_detector_sv_scene
 pokemon_detector_sv_detect_scene(struct pokemon_detector_sv_context *context);
@@ -99,6 +120,9 @@ int pokemon_detector_sv_selection_order_recognize(
 void pokemon_detector_sv_selection_order_export(
     struct pokemon_detector_sv_context *context, int index, const char *path,
     bool shouldBeBlank);
+
+enum pokemon_detector_sv_result pokemon_detector_sv_recognize_result(
+    struct pokemon_detector_sv_context *context);
 
 #ifdef __cplusplus
 }

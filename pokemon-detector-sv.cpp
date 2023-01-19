@@ -6,6 +6,7 @@
 
 #include "EntityCropper.h"
 #include "PokemonRecognizer.h"
+#include "ResultRecognizer.h"
 #include "SceneDetector.h"
 #include "SelectionRecognizer.h"
 
@@ -34,7 +35,13 @@ extern "C" struct pokemon_detector_sv_context {
             convertInt62ToVector6Array2(config.opponent_row_range)),
         selectionOrderCropper(
             convertInt2ToStdArray2(config.selection_order_range_col),
-            convertInt62ToVector6Array2(config.selection_order_range_row)) {}
+            convertInt62ToVector6Array2(config.selection_order_range_row)),
+        resultCropper(convertInt2ToStdArray2(config.result_range_col),
+                      std::vector<std::array<int, 2>>{
+                          convertInt2ToStdArray2(config.result_range_row[0])}),
+        resultRecognizer(config.result_n_bins, config.result_lose_max_index,
+                         config.result_lose_ratio, config.result_win_max_index,
+                         config.result_win_max_index) {}
 
   const struct pokemon_detector_sv_config config;
   cv::Mat screenBGRA, screenBGR, screenHSV;
@@ -45,6 +52,8 @@ extern "C" struct pokemon_detector_sv_context {
   EntityCropper selectionOrderCropper;
   SelectionRecognizer selectionRecognizer;
   std::array<int, 6> selectionOrderIndex;
+  EntityCropper resultCropper;
+  ResultRecognizer resultRecognizer;
 };
 
 extern "C" struct pokemon_detector_sv_context *
@@ -122,4 +131,15 @@ extern "C" void pokemon_detector_sv_selection_order_export(
     image *= 0;
   }
   cv::imwrite(path, image);
+}
+
+extern "C" void
+pokemon_detector_sv_result_crop(struct pokemon_detector_sv_context *context) {
+  context->resultCropper.crop(context->screenBGRA);
+}
+
+extern "C" enum pokemon_detector_sv_result pokemon_detector_sv_result_recognize(
+    struct pokemon_detector_sv_context *context) {
+  return context->resultRecognizer.recognizeResult(
+      context->resultCropper.imagesBGR[0]);
 }

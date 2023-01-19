@@ -2,21 +2,21 @@
 
 #include <opencv2/opencv.hpp>
 
+#include "pokemon-detector-sv.h"
+
 class ResultRecognizer {
 public:
-  enum ResultType { UNKNOWN, WIN, LOSE };
-
   int nBins;
-  double winRatio;
-  int winMaxIndex;
   double loseRatio;
   int loseMaxIndex;
+  double winRatio;
+  int winMaxIndex;
 
-  ResultRecognizer(int nBins, double winRatio, double loseRatio,
-                   int winMaxIndex, int loseMaxIndex)
-      : nBins(nBins), winRatio(winRatio), loseRatio(loseRatio),
-        winMaxIndex(winMaxIndex), loseMaxIndex(loseMaxIndex) {}
+  ResultRecognizer(int nBins, int loseMaxIndex, double loseRatio,
+                   int winMaxIndex, double winRatio)
+      : nBins(nBins), loseRatio(loseRatio), loseMaxIndex(loseMaxIndex),
+        winRatio(winRatio), winMaxIndex(winMaxIndex) {}
 
-  ResultType recognizeResult(const cv::Mat &imageBGR);
+  pokemon_detector_sv_result recognizeResult(const cv::Mat &imageBGR);
   void calcHistHue(const cv::Mat &areaHSV, cv::Mat &hist);
 };

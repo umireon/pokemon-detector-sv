@@ -1,6 +1,6 @@
 #include "ResultRecognizer.h"
 
-ResultRecognizer::ResultType
+pokemon_detector_sv_result
 ResultRecognizer::recognizeResult(const cv::Mat &areaBGR) {
   const cv::Mat areaHSV = areaBGR;
   cv::Mat hist;
@@ -9,12 +9,12 @@ ResultRecognizer::recognizeResult(const cv::Mat &areaBGR) {
   double maxVal;
   cv::Point maxIdx;
   cv::minMaxLoc(hist, nullptr, &maxVal, nullptr, &maxIdx);
-  if (maxVal > areaHSV.total() * winRatio && maxIdx.y == winMaxIndex) {
-    return ResultType::WIN;
-  } else if (maxVal > areaHSV.total() * loseRatio && maxIdx.y == loseMaxIndex) {
-    return ResultType::LOSE;
+  if (maxVal > areaHSV.total() * loseRatio && maxIdx.y == loseMaxIndex) {
+    return POKEMON_DETECTOR_SV_RESULT_LOSE;
+  } else if (maxVal > areaHSV.total() * winRatio && maxIdx.y == winMaxIndex) {
+    return POKEMON_DETECTOR_SV_RESULT_WIN;
   } else {
-    return ResultType::UNKNOWN;
+    return POKEMON_DETECTOR_SV_RESULT_UNKNOWN;
   }
 }
 
