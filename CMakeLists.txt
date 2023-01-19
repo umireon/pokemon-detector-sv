@@ -1,13 +1,14 @@
 cmake_minimum_required(VERSION 3.16)
 project(pokemon-detector-sv)
 
-set(CMAKE_CXX_STANDARD 17)
-
 include(ExternalProject)
 
 if(APPLE)
     set(apple_args -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES})
 endif(APPLE)
+
+set(CMAKE_C_COMPILER clang)
+set(CMAKE_CXX_COMPILER clang++)
 
 ExternalProject_Add(o
         URL https://github.com/umireon/opencv/archive/refs/heads/4.x.tar.gz
@@ -22,6 +23,8 @@ ExternalProject_Add(o
         CMAKE_ARGS
             -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
             -DCMAKE_BUILD_TYPE=Release
+            -DCMAKE_C_COMPILER=clang
+            -DCMAKE_CXX_COMPILER=clang++
             -DOPENCV_FORCE_3RDPARTY_BUILD=ON
             -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13
             -DBUILD_SHARED_LIBS=OFF
@@ -123,10 +126,10 @@ set_target_properties(
 )
 add_library(OpenCV INTERFACE)
 target_link_libraries(OpenCV INTERFACE
-        OpenCV::Core
         OpenCV::Features2d
         OpenCV::Imgcodecs
         OpenCV::Imgproc
+        OpenCV::Core
         OpenCV::Libpng
         OpenCV::Zlib
         )
@@ -135,10 +138,10 @@ if(APPLE)
 endif(APPLE)
 
 install(FILES
-        $<TARGET_PROPERTY:OpenCV::Core,IMPORTED_LOCATION>
         $<TARGET_PROPERTY:OpenCV::Features2d,IMPORTED_LOCATION>
         $<TARGET_PROPERTY:OpenCV::Imgcodecs,IMPORTED_LOCATION>
         $<TARGET_PROPERTY:OpenCV::Imgproc,IMPORTED_LOCATION>
+        $<TARGET_PROPERTY:OpenCV::Core,IMPORTED_LOCATION>
         $<TARGET_PROPERTY:OpenCV::Libpng,IMPORTED_LOCATION>
         $<TARGET_PROPERTY:OpenCV::Zlib,IMPORTED_LOCATION>
         TYPE LIB)
