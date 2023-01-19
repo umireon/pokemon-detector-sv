@@ -4,10 +4,13 @@ static constexpr int UNRECOGNIZED_THRESHOLD = 100;
 
 int SelectionRecognizer::recognizeSelection(const cv::Mat &imageBGR) {
   cv::Mat scaledBGR;
-  cv::cvtColor(imageBGR, scaledBGR, cv::COLOR_BGR2GRAY);
-  cv::resize(scaledBGR, scaledBGR,
+  cv::resize(imageBGR, scaledBGR,
              cv::Size(imageBGR.rows * NORMALIZED_HEIGHT / imageBGR.cols,
                       NORMALIZED_HEIGHT));
+  cv::cvtColor(scaledBGR, scaledBGR, cv::COLOR_BGR2GRAY);
+  cv::threshold(scaledBGR, scaledBGR, BINARY_THRESHOLD, 255, cv::THRESH_BINARY);
+
+  cv::imwrite("/Users/umireon/0.png", scaledBGR);
 
   std::vector<cv::KeyPoint> targetKeyPoints;
   cv::Mat targetDescriptors;
