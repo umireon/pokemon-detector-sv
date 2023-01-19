@@ -38,8 +38,6 @@ int SelectionRecognizer::recognizeSelection(const cv::Mat &imageBGR) {
     } else {
       results.push_back(sum / (double)matches.size());
     }
-
-    std::cout << sum / (double)matches.size() << std::endl;
   }
 
   const auto index = std::distance(
