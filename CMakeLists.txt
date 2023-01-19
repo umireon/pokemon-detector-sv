@@ -6,6 +6,8 @@ include(ExternalProject)
 string(REPLACE ";" "$<SEMICOLON>" CMAKE_OSX_ARCHITECTURES_ "${CMAKE_OSX_ARCHITECTURES}")
 set(CMAKE_CXX_STANDARD 17)
 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 ExternalProject_Add(o
         URL https://github.com/umireon/opencv/archive/refs/heads/4.x.tar.gz
         BUILD_BYPRODUCTS
