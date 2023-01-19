@@ -42,6 +42,7 @@ extern "C" struct pokemon_detector_sv_context {
   std::array<std::string, 6> opponentPokemonIds;
   EntityCropper selectionOrderCropper;
   SelectionRecognizer selectionRecognizer;
+  std::array<int, 6> selectionOrderIndex;
 };
 
 extern "C" struct pokemon_detector_sv_context *
@@ -102,14 +103,15 @@ extern "C" void pokemon_detector_sv_crop_my_team_pokemons(
 
 extern "C" void pokemon_detector_sv_selection_order_crop(
     struct pokemon_detector_sv_context *context) {
-  context->opponentPokemonsCropper.crop(context->screenBGRA);
-  context->opponentPokemonsCropper.generateMask();
+  context->selectionOrderCropper.crop(context->screenBGRA);
 }
 
 extern "C" int pokemon_detector_sv_selection_order_recognize(
     struct pokemon_detector_sv_context *context, int index) {
-  return context->selectionRecognizer.recognizeSelection(
-      context->selectionOrderCropper.imagesBGR[index]);
+  context->selectionOrderIndex[index] =
+      context->selectionRecognizer.recognizeSelection(
+          context->selectionOrderCropper.imagesBGR[index]);
+  return context->selectionOrderIndex[index];
 }
 
 extern "C" void pokemon_detector_sv_selection_order_export(
