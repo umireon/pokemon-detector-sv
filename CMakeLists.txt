@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 include(ExternalProject)
 
-ExternalProject_Add(OpenCVDownload
+ExternalProject_Add(o
         URL https://github.com/opencv/opencv/archive/refs/tags/4.7.0.tar.gz
         BUILD_BYPRODUCTS
             <INSTALL_DIR>/lib/libopencv_core${CMAKE_STATIC_LIBRARY_SUFFIX}
@@ -85,7 +85,7 @@ ExternalProject_Add(OpenCVDownload
             -DWITH_OPENCL=OFF
         )
 
-ExternalProject_Get_Property(OpenCVDownload INSTALL_DIR)
+ExternalProject_Get_Property(o INSTALL_DIR)
 add_library(OpenCV::Core STATIC IMPORTED)
 set_target_properties(OpenCV::Core PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/libopencv_core${CMAKE_STATIC_LIBRARY_SUFFIX})
 
@@ -136,7 +136,7 @@ install(FILES
         $<TARGET_PROPERTY:OpenCV::Zlib,IMPORTED_LOCATION>
         TYPE LIB)
 
-add_dependencies(OpenCV OpenCVDownload)
+add_dependencies(OpenCV o)
 
 add_library(pokemon-detector-sv STATIC)
 target_sources(pokemon-detector-sv PRIVATE
