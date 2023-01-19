@@ -2,7 +2,7 @@
 
 static constexpr int NORMALIZED_HEIGHT = 98;
 static constexpr int DESCRIPTOR_SIZE = 64;
-static constexpr int UNRECOGNIZED_THRESHOLD = 100;
+static constexpr int UNRECOGNIZED_THRESHOLD = 10;
 
 int SelectionRecognizer::recognizeSelection(const cv::Mat &imageBGR) {
   cv::Mat scaledBGR;
