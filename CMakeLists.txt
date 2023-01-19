@@ -87,22 +87,22 @@ ExternalProject_Add(o
 
 ExternalProject_Get_Property(o INSTALL_DIR)
 add_library(OpenCV::Core STATIC IMPORTED)
-set_target_properties(OpenCV::Core PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/libopencv_core${CMAKE_STATIC_LIBRARY_SUFFIX})
+set_target_properties(OpenCV::Core PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}opencv_core${CMAKE_STATIC_LIBRARY_SUFFIX})
 
 add_library(OpenCV::Features2d STATIC IMPORTED)
-set_target_properties(OpenCV::Features2d PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/libopencv_features2d${CMAKE_STATIC_LIBRARY_SUFFIX})
+set_target_properties(OpenCV::Features2d PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}opencv_features2d${CMAKE_STATIC_LIBRARY_SUFFIX})
 
 add_library(OpenCV::Imgcodecs STATIC IMPORTED)
-set_target_properties(OpenCV::Imgcodecs PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/libopencv_imgcodecs${CMAKE_STATIC_LIBRARY_SUFFIX})
+set_target_properties(OpenCV::Imgcodecs PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}pencv_imgcodecs${CMAKE_STATIC_LIBRARY_SUFFIX})
 
 add_library(OpenCV::Imgproc STATIC IMPORTED)
-set_target_properties(OpenCV::Imgproc PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/libopencv_imgproc${CMAKE_STATIC_LIBRARY_SUFFIX})
+set_target_properties(OpenCV::Imgproc PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}opencv_imgproc${CMAKE_STATIC_LIBRARY_SUFFIX})
 
 add_library(OpenCV::Libpng STATIC IMPORTED)
-set_target_properties(OpenCV::Libpng PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/opencv4/3rdparty/liblibpng${CMAKE_STATIC_LIBRARY_SUFFIX})
+set_target_properties(OpenCV::Libpng PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/opencv4/3rdparty/${CMAKE_STATIC_LIBRARY_PREFIX}libpng${CMAKE_STATIC_LIBRARY_SUFFIX})
 
 add_library(OpenCV::Zlib STATIC IMPORTED)
-set_target_properties(OpenCV::Zlib PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/opencv4/3rdparty/libzlib${CMAKE_STATIC_LIBRARY_SUFFIX})
+set_target_properties(OpenCV::Zlib PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/opencv4/3rdparty/${CMAKE_STATIC_LIBRARY_PREFIX}zlib${CMAKE_STATIC_LIBRARY_SUFFIX})
 
 set_target_properties(
         OpenCV::Core
