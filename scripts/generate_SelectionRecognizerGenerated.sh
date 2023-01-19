@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
-descriptor_size=16
-normalized_height=128
+descriptor_size=64
+normalized_height=256
 binary_threshold=200
 rows=$(($descriptor_size / 8))
 (
