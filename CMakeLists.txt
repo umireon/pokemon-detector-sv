@@ -4,6 +4,7 @@ project(pokemon-detector-sv)
 include(ExternalProject)
 
 string(REPLACE ";" "$<SEMICOLON>" CMAKE_OSX_ARCHITECTURES_ "${CMAKE_OSX_ARCHITECTURES}")
+set(CMAKE_CXX_STANDARD 17)
 
 ExternalProject_Add(o
         URL https://github.com/umireon/opencv/archive/refs/heads/4.x.tar.gz
