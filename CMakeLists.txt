@@ -75,8 +75,6 @@ ExternalProject_Add(o
             -DWITH_FFMPEG=OFF
             -DWITH_GSTREAMER=OFF
             -DWITH_1394=OFF
-            -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
-            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
             -DWITH_PROTOBUF=OFF
             -DBUILD_PROTOBUF=OFF
             -DWITH_CAROTENE=OFF
