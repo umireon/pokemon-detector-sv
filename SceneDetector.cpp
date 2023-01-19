@@ -5,8 +5,6 @@ pokemon_detector_sv_scene SceneDetector::detectScene(const cv::Mat &screenHSV) {
     return POKEMON_DETECTOR_SV_SCENE_SELECT_POKEMON;
   } else if (isBlackTransition(screenHSV)) {
     return POKEMON_DETECTOR_SV_SCENE_BLACK_TRANSITION;
-  } else if (isSelectMyTeamScreen(screenHSV)) {
-    return POKEMON_DETECTOR_SV_SCENE_SELECT_MY_TEAM;
   } else {
     return POKEMON_DETECTOR_SV_SCENE_UNDEFINED;
   }
@@ -21,10 +19,6 @@ bool SceneDetector::isBlackTransition(const cv::Mat &screenHSV) {
   return predictByHueHist(screenHSV, classifierBlackTransition);
 }
 
-bool SceneDetector::isSelectMyTeamScreen(const cv::Mat &screenHSV) {
-  return predictByHueHist(screenHSV, classifierSelectMyTeam);
-}
-
 void SceneDetector::calcHistHue(const cv::Mat &areaHSV, cv::Mat &hist,
                                 int channel, int nBins) {
   const int channels[]{channel};
@@ -37,8 +31,9 @@ void SceneDetector::calcHistHue(const cv::Mat &areaHSV, cv::Mat &hist,
 bool SceneDetector::predictByHueHist(
     const cv::Mat &screenHSV,
     const pokemon_detector_sv_hist_classifier &classifier) {
-  const cv::Range rowRange(classifier.ranges_row[0], classifier.ranges_row[1]),
-      colRange(classifier.ranges_col[0], classifier.ranges_col[1]);
+  const double xScale = screenHSV.cols / 1980.0, yScale = screenHSV.rows / 1080.0;
+  const cv::Range rowRange(classifier.range_row[0] * yScale, classifier.range_row[1] * yScale),
+      colRange(classifier.range_col[0] * xScale, classifier.range_col[1] * xScale);
 
   const cv::Mat areaHSV = screenHSV(rowRange, colRange);
   cv::Mat hist;

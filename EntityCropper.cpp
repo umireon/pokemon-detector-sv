@@ -3,9 +3,10 @@
 #include "EntityCropper.h"
 #include <iostream>
 void EntityCropper::crop(const cv::Mat &screenBGRA) {
+  double xScale = screenBGRA.cols / 1980.0, yScale = screenBGRA.rows / 1080.0;
   for (int i = 0; i < 6; i++) {
-    const cv::Range colRange(rangeCol[0], rangeCol[1]),
-        rowRange(rangesRow[i][0], rangesRow[i][1]);
+    const cv::Range colRange(rangeCol[0] * xScale, rangeCol[1] * xScale),
+        rowRange(rangesRow[i][0] * yScale, rangesRow[i][1] * yScale);
     imagesBGRA[i] = screenBGRA(rowRange, colRange);
     cv::cvtColor(imagesBGRA[i], imagesBGR[i], cv::COLOR_BGRA2BGR);
   }

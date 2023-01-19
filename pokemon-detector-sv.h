@@ -7,13 +7,12 @@ extern "C" {
 enum pokemon_detector_sv_scene {
   POKEMON_DETECTOR_SV_SCENE_UNDEFINED,
   POKEMON_DETECTOR_SV_SCENE_SELECT_POKEMON,
-  POKEMON_DETECTOR_SV_SCENE_BLACK_TRANSITION,
-  POKEMON_DETECTOR_SV_SCENE_SELECT_MY_TEAM
+  POKEMON_DETECTOR_SV_SCENE_BLACK_TRANSITION
 };
 
 struct pokemon_detector_sv_hist_classifier {
-  const int ranges_col[2];
-  const int ranges_row[2];
+  const int range_col[2];
+  const int range_row[2];
   const int hist_channel;
   const int hist_bins;
   const int hist_max_index;
@@ -21,14 +20,10 @@ struct pokemon_detector_sv_hist_classifier {
 };
 
 struct pokemon_detector_sv_config {
-  const int screen_width;
-  const int screen_height;
   const int opponent_col_range[2];
   const int opponent_row_range[6][2];
   const int selection_order_range_col[2];
   const int selection_order_range_row[6][2];
-  const int my_team_select_range_col[2];
-  const int my_team_select_range_row[6][2];
   const struct pokemon_detector_sv_hist_classifier classifier_lobby_my_select;
   const struct pokemon_detector_sv_hist_classifier
       classifier_lobby_opponent_select;
@@ -37,8 +32,6 @@ struct pokemon_detector_sv_config {
 };
 
 const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
-    .screen_width = 1920,
-    .screen_height = 1080,
     .opponent_col_range = {1239, 1337},
     .opponent_row_range = {{228, 326},
                            {330, 428},
@@ -53,32 +46,24 @@ const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
                                   {503, 535},
                                   {619, 651},
                                   {735, 767}},
-    .my_team_select_range_col = {0, 1},
-    .my_team_select_range_row = {{}, {}, {}, {}, {}, {}},
-    .classifier_lobby_my_select = {.ranges_col = {149, 811},
-                                   .ranges_row = {139, 842},
+    .classifier_lobby_my_select = {.range_col = {149, 811},
+                                   .range_row = {139, 842},
                                    .hist_channel = 0,
                                    .hist_bins = 30,
                                    .hist_max_index = 17,
                                    .hist_ratio = 0.5},
-    .classifier_lobby_opponent_select = {.ranges_col = {1229, 1649},
-                                         .ranges_row = {227, 836},
+    .classifier_lobby_opponent_select = {.range_col = {1229, 1649},
+                                         .range_row = {227, 836},
                                          .hist_channel = 0,
                                          .hist_bins = 30,
                                          .hist_max_index = 0,
                                          .hist_ratio = 0.8},
-    .classifier_black_transition = {.ranges_col = {400, 600},
-                                    .ranges_row = {400, 600},
+    .classifier_black_transition = {.range_col = {400, 600},
+                                    .range_row = {400, 600},
                                     .hist_channel = 2,
                                     .hist_bins = 8,
                                     .hist_max_index = 0,
-                                    .hist_ratio = 0.8},
-    .classifier_select_my_team = {.ranges_col = {749, 1179},
-                                  .ranges_row = {237, 859},
-                                  .hist_channel = 2,
-                                  .hist_bins = 8,
-                                  .hist_max_index = 7,
-                                  .hist_ratio = 0.5}};
+                                    .hist_ratio = 0.8}};
 
 struct pokemon_detector_sv_context;
 
@@ -88,7 +73,8 @@ pokemon_detector_sv_create(const struct pokemon_detector_sv_config config);
 void pokemon_detector_sv_destroy(struct pokemon_detector_sv_context *context);
 
 void pokemon_detector_sv_load_screen(
-    struct pokemon_detector_sv_context *context, unsigned char *buf_bgra);
+    struct pokemon_detector_sv_context *context, void *buf_bgra,
+    int width, int height);
 
 enum pokemon_detector_sv_scene
 pokemon_detector_sv_detect_scene(struct pokemon_detector_sv_context *context);

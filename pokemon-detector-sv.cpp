@@ -57,10 +57,8 @@ pokemon_detector_sv_destroy(struct pokemon_detector_sv_context *context) {
 
 extern "C" void
 pokemon_detector_sv_load_screen(struct pokemon_detector_sv_context *context,
-                                unsigned char *buf_bgra) {
-  context->screenBGRA =
-      cv::Mat(context->config.screen_height, context->config.screen_width,
-              CV_8UC4, buf_bgra);
+                                void *buf_bgra, int width, int height) {
+  context->screenBGRA = cv::Mat(height, width, CV_8UC4, buf_bgra);
 }
 
 extern "C" enum pokemon_detector_sv_scene
