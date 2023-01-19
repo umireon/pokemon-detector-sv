@@ -83,6 +83,7 @@ ExternalProject_Add(o
             -DWITH_ADE=OFF
             -DWITH_ITT=OFF
             -DWITH_OPENCL=OFF
+            -DWITH_IPP=OFF
         )
 
 ExternalProject_Get_Property(o INSTALL_DIR)
