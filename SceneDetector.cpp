@@ -31,7 +31,7 @@ void SceneDetector::calcHistHue(const cv::Mat &areaHSV, cv::Mat &hist,
 bool SceneDetector::predictByHueHist(
     const cv::Mat &screenHSV,
     const pokemon_detector_sv_hist_classifier &classifier) {
-  const double xScale = screenHSV.cols / 1980.0, yScale = screenHSV.rows / 1080.0;
+  const double xScale = screenHSV.cols / 1920.0, yScale = screenHSV.rows / 1080.0;
   const cv::Range rowRange(classifier.range_row[0] * yScale, classifier.range_row[1] * yScale),
       colRange(classifier.range_col[0] * xScale, classifier.range_col[1] * xScale);
 
