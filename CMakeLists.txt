@@ -4,7 +4,7 @@ project(pokemon-detector-sv)
 include(ExternalProject)
 
 if(APPLE)
-    set(apple_args -DCMAKE_OSX_ARCHITECTURES="${CMAKE_OSX_ARCHITECTURES})"
+    set(apple_args -DCMAKE_OSX_ARCHITECTURES="${CMAKE_OSX_ARCHITECTURES}")
 endif(APPLE)
 
 ExternalProject_Add(o
