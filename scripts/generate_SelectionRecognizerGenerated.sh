@@ -15,7 +15,12 @@ rows=$(($descriptor_size / 8))
     printf '%s' 'const std::vector<int> SelectionRecognizer::SELECTION_INDEX = {'
     for name in $(basename -s .png ./train/SelectionRecognizer/*.png)
     do
-      printf '%s' ${name: -1},
+      if [[ ${name: -1} == 0 ]]
+      then
+        printf '%s' -1,
+      else
+        printf '%s' ${name: -1},
+      fi
     done
     printf '%s\n' '};'
 
