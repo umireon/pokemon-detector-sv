@@ -1,7 +1,7 @@
 #include <opencv2/opencv.hpp>
 
 #include "EntityCropper.h"
-#include <iostream>
+
 void EntityCropper::crop(const cv::Mat &screenBGRA) {
   double xScale = screenBGRA.cols / 1920.0, yScale = screenBGRA.rows / 1080.0;
   for (int i = 0; i < rangesRow.size(); i++) {

@@ -1,5 +1,6 @@
-#include "SelectionRecognizer.h"
 #include <iostream>
+
+#include "SelectionRecognizer.h"
 
 static constexpr int BLUE_THRESHOLD = 200;
 

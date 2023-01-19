@@ -1,6 +1,8 @@
-#include "pokemon-detector-sv.h"
 #include <filesystem>
+
 #include <opencv2/opencv.hpp>
+
+#include "pokemon-detector-sv.h"
 
 #include "EntityCropper.h"
 #include "PokemonRecognizer.h"

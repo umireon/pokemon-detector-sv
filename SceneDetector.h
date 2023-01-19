@@ -1,7 +1,8 @@
 #pragma once
 
-#include "pokemon-detector-sv.h"
 #include <opencv2/opencv.hpp>
+
+#include "pokemon-detector-sv.h"
 
 class SceneDetector {
 public:

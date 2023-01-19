@@ -1,6 +1,9 @@
-#include "PokemonRecognizer.h"
-#include <opencv2/opencv.hpp>
 #include <vector>
+
+#include <opencv2/opencv.hpp>
+
+#include "PokemonRecognizer.h"
+
 const std::vector<std::string> PokemonRecognizer::POKEMON_IDS = {
     "0091", "0094", "0128", "0149",  "0184", "0248", "0423", "0445",
     "0450", "0462", "0475", "0479W", "0612", "0635", "0706", "0750",

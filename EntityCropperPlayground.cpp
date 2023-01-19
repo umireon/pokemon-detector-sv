@@ -1,5 +1,7 @@
-#include "EntityCropper.h"
 #include <iostream>
+
+#include "EntityCropper.h"
+
 int main(int argc, const char **argv) {
   const std::vector<std::string> paths(&argv[1], &argv[argc]);
   const std::array<int, 2> rangeCol{483, 697};
