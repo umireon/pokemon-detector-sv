@@ -177,4 +177,4 @@ target_link_libraries(SelectionRecognizerBench OpenCV)
 add_executable(ResultRecognizerBench ResultRecognizerBench.cpp ResultRecognizer.cpp)
 target_link_libraries(ResultRecognizerBench OpenCV)
 
-install(TARGETS pokemon-detector-sv FILE_SET HEADERS)
+install(TARGETS pokemon-detector-sv)
