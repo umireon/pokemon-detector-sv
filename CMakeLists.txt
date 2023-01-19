@@ -8,12 +8,12 @@ include(ExternalProject)
 ExternalProject_Add(OpenCVDownload
         URL https://github.com/opencv/opencv/archive/refs/tags/4.7.0.tar.gz
         BUILD_BYPRODUCTS
-            <INSTALL_DIR>/lib/libopencv_core.a
-            <INSTALL_DIR>/lib/libopencv_features2d.a
-            <INSTALL_DIR>/lib/libopencv_imgcodecs.a
-            <INSTALL_DIR>/lib/libopencv_imgproc.a
-            <INSTALL_DIR>/lib/opencv4/3rdparty/liblibpng.a
-            <INSTALL_DIR>/lib/opencv4/3rdparty/libzlib.a
+            <INSTALL_DIR>/lib/libopencv_core${CMAKE_STATIC_LIBRARY_SUFFIX}
+            <INSTALL_DIR>/lib/libopencv_features2d${CMAKE_STATIC_LIBRARY_SUFFIX}
+            <INSTALL_DIR>/lib/libopencv_imgcodecs${CMAKE_STATIC_LIBRARY_SUFFIX}
+            <INSTALL_DIR>/lib/libopencv_imgproc${CMAKE_STATIC_LIBRARY_SUFFIX}
+            <INSTALL_DIR>/lib/opencv4/3rdparty/liblibpng${CMAKE_STATIC_LIBRARY_SUFFIX}
+            <INSTALL_DIR>/lib/opencv4/3rdparty/libzlib${CMAKE_STATIC_LIBRARY_SUFFIX}
         CMAKE_GENERATOR Ninja
         CMAKE_ARGS
             -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13
