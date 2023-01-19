@@ -117,7 +117,7 @@ extern "C" int pokemon_detector_sv_selection_order_recognize(
 extern "C" void pokemon_detector_sv_selection_order_export(
     struct pokemon_detector_sv_context *context, int index, const char *path,
     bool shouldBeBlank) {
-  cv::Mat image = context->selectionOrderCropper.imagesBGRA[index]);
+  cv::Mat image = context->selectionOrderCropper.imagesBGRA[index];
   if (shouldBeBlank) {
     image *= 0;
   }
