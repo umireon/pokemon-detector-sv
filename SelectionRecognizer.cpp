@@ -1,16 +1,17 @@
 #include "SelectionRecognizer.h"
 #include <iostream>
-static constexpr int UNRECOGNIZED_THRESHOLD = 100;
+
+static constexpr int BLUE_THRESHOLD = 200;
 
 int SelectionRecognizer::recognizeSelection(const cv::Mat &imageBGR) {
+  if (imageBGR.at<cv::Vec3b>(0, 0)[0] < BLUE_THRESHOLD) return -1;
+
   cv::Mat scaledBGR;
   cv::resize(imageBGR, scaledBGR,
              cv::Size(imageBGR.rows * NORMALIZED_HEIGHT / imageBGR.cols,
                       NORMALIZED_HEIGHT));
   cv::cvtColor(scaledBGR, scaledBGR, cv::COLOR_BGR2GRAY);
   cv::threshold(scaledBGR, scaledBGR, BINARY_THRESHOLD, 255, cv::THRESH_BINARY);
-
-  cv::imwrite("/Users/umireon/0.png", scaledBGR);
 
   std::vector<cv::KeyPoint> targetKeyPoints;
   cv::Mat targetDescriptors;
@@ -37,14 +38,12 @@ int SelectionRecognizer::recognizeSelection(const cv::Mat &imageBGR) {
     } else {
       results.push_back(sum / (double)matches.size());
     }
+
+    std::cout << sum / (double)matches.size() << std::endl;
   }
 
   const auto index = std::distance(
       results.begin(), std::min_element(results.begin(), results.end()));
 
-  if (results[index] > UNRECOGNIZED_THRESHOLD) {
-    return -1;
-  } else {
-    return SELECTION_INDEX[index];
-  }
+  return SELECTION_INDEX[index];
 }
