@@ -34,6 +34,7 @@ extern "C" struct pokemon_detector_sv_context {
         opponentPokemonCropper(
             convertInt2ToStdArray2(config.opponent_col_range),
             convertInt62ToVector6Array2(config.opponent_row_range)),
+        opponentPokemonIds(6),
         selectionOrderCropper(
             convertInt2ToStdArray2(config.selection_order_range_col),
             convertInt62ToVector6Array2(config.selection_order_range_row)),
@@ -45,7 +46,6 @@ extern "C" struct pokemon_detector_sv_context {
                          config.result_win_max_index) {}
 
   const struct pokemon_detector_sv_config config;
-  struct pokemon_detector_sv_matchstate matchstate;
 
   cv::Mat screenBGRA, screenBGR, screenHSV;
 
@@ -53,6 +53,7 @@ extern "C" struct pokemon_detector_sv_context {
 
   EntityCropper opponentPokemonCropper;
   PokemonRecognizer pokemonRecognizer;
+  std::vector<std::string> opponentPokemonIds;
 
   EntityCropper selectionOrderCropper;
   SelectionRecognizer selectionOrderRecognizer;
@@ -105,9 +106,8 @@ extern "C" const char *pokemon_detector_sv_opponent_pokemon_recognize(
   auto id = context->pokemonRecognizer.recognizePokemon(
       context->opponentPokemonCropper.imagesBGR[index],
       context->opponentPokemonCropper.masks[index]);
-  id.copy(context->matchstate.opponent_pokemon_ids[index],
-          sizeof(context->matchstate.opponent_pokemon_ids[0]) - 1);
-  return context->matchstate.opponent_pokemon_ids[index];
+  context->opponentPokemonIds[index] = id;
+  return context->opponentPokemonIds[index].c_str();
 }
 
 extern "C" void pokemon_detector_sv_my_selection_order_crop(
@@ -117,10 +117,8 @@ extern "C" void pokemon_detector_sv_my_selection_order_crop(
 
 extern "C" int pokemon_detector_sv_my_selection_order_recognize(
     struct pokemon_detector_sv_context *context, int index) {
-  auto order = context->selectionOrderRecognizer.recognizeSelection(
+  return context->selectionOrderRecognizer.recognizeSelection(
       context->selectionOrderCropper.imagesBGR[index]);
-  context->matchstate.my_selection_order[index] = order;
-  return order;
 }
 
 extern "C" void pokemon_detector_sv_my_selection_order_export_image(
@@ -140,39 +138,26 @@ pokemon_detector_sv_result_crop(struct pokemon_detector_sv_context *context) {
 
 extern "C" enum pokemon_detector_sv_result pokemon_detector_sv_result_recognize(
     struct pokemon_detector_sv_context *context) {
-  auto result = context->resultRecognizer.recognizeResult(
+  return context->resultRecognizer.recognizeResult(
       context->resultCropper.imagesBGR[0]);
-  context->matchstate.result = result;
-  return result;
-}
-
-extern "C" void pokemon_detector_sv_matchstate_clear(
-    struct pokemon_detector_sv_context *context) {
-  auto &matchstate = context->matchstate;
-  matchstate.result = POKEMON_DETECTOR_SV_RESULT_UNKNOWN;
-  std::memset(matchstate.my_selection_order, 0,
-              sizeof(matchstate.my_selection_order));
-  std::memset(matchstate.opponent_pokemon_ids, 0,
-              sizeof(matchstate.opponent_pokemon_ids));
 }
 
 extern "C" void pokemon_detector_sv_matchstate_append(
-    struct pokemon_detector_sv_context *context, const char *filepath) {
+    struct pokemon_detector_sv_matchstate *matchstate, const char *filepath) {
   std::ofstream ofs(filepath, std::ios_base::app);
-  auto &matchstate = context->matchstate;
-  if (matchstate.result == POKEMON_DETECTOR_SV_RESULT_UNKNOWN) {
+  if (matchstate->result == POKEMON_DETECTOR_SV_RESULT_UNKNOWN) {
     ofs << "UNKNOWN";
-  } else if (matchstate.result == POKEMON_DETECTOR_SV_RESULT_LOSE) {
+  } else if (matchstate->result == POKEMON_DETECTOR_SV_RESULT_LOSE) {
     ofs << "LOSE";
-  } else if (matchstate.result == POKEMON_DETECTOR_SV_RESULT_WIN) {
+  } else if (matchstate->result == POKEMON_DETECTOR_SV_RESULT_WIN) {
     ofs << "WIN";
   }
   ofs << "\t";
   for (int i = 0; i < 6; i++) {
-    ofs << matchstate.my_selection_order[i] << "\t";
+    ofs << matchstate->my_selection_order[i] << "\t";
   }
   for (int i = 0; i < 6; i++) {
-    ofs << matchstate.opponent_pokemon_ids[i] << "\t";
+    ofs << matchstate->opponent_pokemon_ids[i] << "\t";
   }
   ofs << "\n";
 }

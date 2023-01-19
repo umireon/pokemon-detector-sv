@@ -89,7 +89,7 @@ const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
 struct pokemon_detector_sv_matchstate {
   enum pokemon_detector_sv_result result;
   int my_selection_order[6];
-  char opponent_pokemon_ids[6][16];
+  char *opponent_pokemon_ids[6];
 };
 
 struct pokemon_detector_sv_context;
@@ -132,10 +132,8 @@ void pokemon_detector_sv_result_crop(
 enum pokemon_detector_sv_result pokemon_detector_sv_result_recognize(
     struct pokemon_detector_sv_context *context);
 
-void pokemon_detector_sv_matchstate_clear(
-    struct pokemon_detector_sv_context *context);
 void pokemon_detector_sv_matchstate_append(
-    struct pokemon_detector_sv_context *context, const char *filepath);
+    struct pokemon_detector_sv_matchstate *matchstate, const char *filepath);
 
 #ifdef __cplusplus
 }
