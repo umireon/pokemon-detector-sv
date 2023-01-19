@@ -14,7 +14,7 @@ void EntityCropper::crop(const cv::Mat &screenBGRA) {
 void EntityCropper::generateMask(void) {
   for (int i = 0; i < 6; i++) {
     cv::Mat mask;
-    cv::floodFill(imagesBGR[i], mask, seedPoint, 0, 0, 0, 0,
+    cv::floodFill(imagesBGR[i], mask, seedPoint, 0, 0, 20, 20,
                   cv::FLOODFILL_MASK_ONLY);
     cv::Range maskCropCol(1, mask.cols - 1), maskCropRow(1, mask.rows - 1);
     masks[i] = 1 - mask(maskCropRow, maskCropCol);
