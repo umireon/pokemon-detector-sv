@@ -173,15 +173,6 @@ if(APPLE)
   target_link_libraries(OpenCV INTERFACE "-framework Accelerate")
 endif(APPLE)
 
-install(
-  FILES $<TARGET_PROPERTY:OpenCV::Features2d,IMPORTED_LOCATION>
-        $<TARGET_PROPERTY:OpenCV::Imgcodecs,IMPORTED_LOCATION>
-        $<TARGET_PROPERTY:OpenCV::Imgproc,IMPORTED_LOCATION>
-        $<TARGET_PROPERTY:OpenCV::Core,IMPORTED_LOCATION>
-        $<TARGET_PROPERTY:OpenCV::Libpng,IMPORTED_LOCATION>
-        $<TARGET_PROPERTY:OpenCV::Zlib,IMPORTED_LOCATION>
-  TYPE LIB)
-
 add_dependencies(OpenCV o)
 
 add_library(libpokemon-detector-sv STATIC)
@@ -197,7 +188,6 @@ target_sources(
           SelectionRecognizerGenerated.cpp
           ResultRecognizer.cpp)
 
-install(FILES ${PROJECT_SOURCE_DIR}/pokemon-detector-sv.h TYPE INCLUDE)
 target_link_libraries(libpokemon-detector-sv OpenCV)
 target_include_directories(libpokemon-detector-sv PUBLIC ${PROJECT_SOURCE_DIR})
 
@@ -226,5 +216,3 @@ target_link_libraries(SelectionRecognizerBench OpenCV)
 
 add_executable(ResultRecognizerBench ResultRecognizerBench.cpp ResultRecognizer.cpp)
 target_link_libraries(ResultRecognizerBench OpenCV)
-
-install(TARGETS libpokemon-detector-sv)
