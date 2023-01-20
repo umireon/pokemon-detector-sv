@@ -19,7 +19,7 @@ if(MSVC)
   endif()
 else()
   set(OCV_LIB_PATH lib)
-  set(OCV_LIB_PATH_3RD lib/opencv4/3rdpart)
+  set(OCV_LIB_PATH_3RD lib/opencv4/3rdparty)
   set(OCV_LIB_SUFFIX "")
 endif()
 
