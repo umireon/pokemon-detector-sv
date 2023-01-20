@@ -157,7 +157,7 @@ extern "C" void pokemon_detector_sv_my_selection_order_export_image(
 	if (shouldBeBlank) {
 		image *= 0;
 	}
-	cv::imwrite(path, image);
+	cv::imwrite(path.c_str(), image);
 }
 
 extern "C" void
