@@ -200,6 +200,7 @@ target_sources(
 
 install(FILES ${PROJECT_SOURCE_DIR}/pokemon-detector-sv.h TYPE INCLUDE)
 target_link_libraries(libpokemon-detector-sv OpenCV)
+target_include_directories(libpokemon-detector-sv PUBLIC ${PROJECT_SOURCE_DIR})
 
 add_executable(pokemon-detector-sv-exe main.cpp)
 target_link_libraries(pokemon-detector-sv-exe OpenCV)
