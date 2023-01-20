@@ -184,6 +184,7 @@ install(
 add_dependencies(OpenCV o)
 
 add_library(libpokemon-detector-sv STATIC)
+set_property(TARGET libpokemon-detector-sv PROPERTY POSITION_INDEPENDENT_CODE ON)
 target_sources(
   libpokemon-detector-sv
   PRIVATE pokemon-detector-sv.cpp
