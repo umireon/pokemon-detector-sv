@@ -23,7 +23,7 @@ else()
 endif()
 
 ExternalProject_Add(
-  o
+  OCV
   URL https://github.com/umireon/opencv/archive/refs/tags/4.7.1.tar.gz
   BUILD_BYPRODUCTS
     <INSTALL_DIR>/${OCV_LIB_PATH}/${CMAKE_STATIC_LIBRARY_PREFIX}opencv_core${OCV_LIB_SUFFIX}${CMAKE_STATIC_LIBRARY_SUFFIX}
@@ -107,7 +107,7 @@ ExternalProject_Add(
              -DWITH_IPP=OFF
              -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES_})
 
-ExternalProject_Get_Property(o INSTALL_DIR)
+ExternalProject_Get_Property(OCV INSTALL_DIR)
 
 add_library(OpenCV::Core STATIC IMPORTED)
 set_target_properties(
@@ -163,17 +163,15 @@ else()
   set(OpenCV_INCLUDE_PATH ${INSTALL_DIR}/include/opencv4)
 endif(MSVC)
 
-set_target_properties(
-  OpenCV::Core OpenCV::Features2d OpenCV::Imgcodecs OpenCV::Imgproc OpenCV::Libpng OpenCV::Zlib
-  PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${OpenCV_INCLUDE_PATH})
 add_library(OpenCV INTERFACE)
 target_link_libraries(OpenCV INTERFACE OpenCV::Features2d OpenCV::Imgcodecs OpenCV::Imgproc
                                        OpenCV::Core OpenCV::Libpng OpenCV::Zlib)
+target_include_directories(OpenCV INTERFACE ${OpenCV_INCLUDE_PATH})
 if(APPLE)
   target_link_libraries(OpenCV INTERFACE "-framework Accelerate")
 endif(APPLE)
 
-add_dependencies(OpenCV o)
+add_dependencies(OpenCV OCV)
 
 add_library(libpokemon-detector-sv STATIC)
 set_property(TARGET libpokemon-detector-sv PROPERTY POSITION_INDEPENDENT_CODE ON)
