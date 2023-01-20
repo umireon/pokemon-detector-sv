@@ -13,7 +13,7 @@ if(APPLE)
 endif(APPLE)
 
 ExternalProject_Add(o
-        URL https://github.com/umireon/opencv/archive/refs/heads/4.x.tar.gz
+        URL https://github.com/umireon/opencv/archive/refs/tags/4.7.1.tar.gz
         BUILD_BYPRODUCTS
             <INSTALL_DIR>/lib/libopencv_core${CMAKE_STATIC_LIBRARY_SUFFIX}
             <INSTALL_DIR>/lib/libopencv_features2d${CMAKE_STATIC_LIBRARY_SUFFIX}
