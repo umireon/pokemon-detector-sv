@@ -119,7 +119,8 @@ extern "C" void pokemon_detector_sv_opponent_pokemon_export_image(
 {
 	std::filesystem::path path(filepath);
 	std::filesystem::create_directories(path.parent_path());
-	cv::imwrite(path.c_str(),
+
+	cv::imwrite(filepath,
 		    context->opponentPokemonCropper.imagesBGRA[index]);
 }
 
@@ -157,7 +158,7 @@ extern "C" void pokemon_detector_sv_my_selection_order_export_image(
 	if (shouldBeBlank) {
 		image *= 0;
 	}
-	cv::imwrite(path.c_str(), image);
+	cv::imwrite(filepath, image);
 }
 
 extern "C" void
