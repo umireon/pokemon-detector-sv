@@ -1,4 +1,4 @@
-#include <iostream>
+#include <limits>
 
 #include "SelectionRecognizer.h"
 
@@ -35,7 +35,7 @@ int SelectionRecognizer::recognizeSelection(const cv::Mat &imageBGR) {
     }
 
     if (matches.size() == 0) {
-      results.push_back(1.0 / 0.0);
+      results.push_back(std::numeric_limits<double>::infinity());
     } else {
       results.push_back(sum / (double)matches.size());
     }
