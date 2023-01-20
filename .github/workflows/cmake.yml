@@ -31,7 +31,7 @@ jobs:
         working-directory: "${{github.workspace}}/build"
         run: "ctest -C ${{env.BUILD_TYPE}}"
 
-  build-macos:
+  build-macos-x86_64:
     runs-on: "macos-12"
 
     steps:
@@ -41,7 +41,9 @@ jobs:
         uses: "seanmiddleditch/gha-setup-ninja@v3"
 
       - name: "Configure CMake"
-        run: "cmake -B ${{github.workspace}}/build -G Ninja -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}"
+        run: |
+          cmake -B ${{github.workspace}}/build -G Ninja -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
+            -DCMAKE_OSX_ARCHITECTURES="x86_64"
 
       - name: "Build"
         run: "cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}"
@@ -49,3 +51,25 @@ jobs:
       - name: "Test"
         working-directory: "${{github.workspace}}/build"
         run: "ctest -C ${{env.BUILD_TYPE}}"
+
+  build-macos-arm64:
+    runs-on: "macos-12"
+
+    steps:
+      - uses: "actions/checkout@v3"
+      
+      - name: "Install ninja-build tool"
+        uses: "seanmiddleditch/gha-setup-ninja@v3"
+
+      - name: "Configure CMake"
+        run: |
+          cmake -B ${{github.workspace}}/build -G Ninja -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
+            -DCMAKE_OSX_ARCHITECTURES="arm64"
+
+      - name: "Build"
+        run: "cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}"
+
+      - name: "Test"
+        working-directory: "${{github.workspace}}/build"
+        run: "ctest -C ${{env.BUILD_TYPE}}"
+
