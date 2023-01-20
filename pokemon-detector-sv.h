@@ -86,7 +86,7 @@ const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
 	.result_n_bins = 16,
 	.result_lose_max_index = 11,
 	.result_lose_ratio = 0.3,
-	.result_win_max_index = 2,
+	.result_win_max_index = 1,
 	.result_win_ratio = 0.3};
 
 struct pokemon_detector_sv_matchstate {
