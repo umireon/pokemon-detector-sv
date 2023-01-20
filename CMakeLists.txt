@@ -34,6 +34,7 @@ ExternalProject_Add(
     <INSTALL_DIR>/${OCV_LIB_PATH_3RD}/${CMAKE_STATIC_LIBRARY_PREFIX}libpng${CMAKE_STATIC_LIBRARY_SUFFIX}
     <INSTALL_DIR>/${OCV_LIB_PATH_3RD}/${CMAKE_STATIC_LIBRARY_PREFIX}zlib${CMAKE_STATIC_LIBRARY_SUFFIX}
   CMAKE_GENERATOR ${CMAKE_GENERATOR}
+  INSTALL_COMMAND cmake --install <BINARY_DIR> --config ${CMAKE_BUILD_TYPE}
   CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
              -DCMAKE_BUILD_TYPE=Release
              -DCMAKE_GENERATOR_PLATFORM=${CMAKE_GENERATOR_PLATFORM}
@@ -185,9 +186,9 @@ install(
 
 add_dependencies(OpenCV o)
 
-add_library(pokemon-detector-sv STATIC)
+add_library(libpokemon-detector-sv STATIC)
 target_sources(
-  pokemon-detector-sv
+  libpokemon-detector-sv
   PRIVATE pokemon-detector-sv.cpp
           SceneDetector.cpp
           PokemonRecognizer.cpp
@@ -198,7 +199,7 @@ target_sources(
           ResultRecognizer.cpp)
 
 install(FILES ${PROJECT_SOURCE_DIR}/pokemon-detector-sv.h TYPE INCLUDE)
-target_link_libraries(pokemon-detector-sv OpenCV)
+target_link_libraries(libpokemon-detector-sv OpenCV)
 
 add_executable(pokemon-detector-sv-exe main.cpp)
 target_link_libraries(pokemon-detector-sv-exe OpenCV)
@@ -231,4 +232,4 @@ add_executable(ResultRecognizerBench ResultRecognizerBench.cpp
                                      ResultRecognizer.cpp)
 target_link_libraries(ResultRecognizerBench OpenCV)
 
-install(TARGETS pokemon-detector-sv)
+install(TARGETS libpokemon-detector-sv)
