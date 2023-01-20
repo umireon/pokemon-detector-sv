@@ -45,6 +45,33 @@ struct pokemon_detector_sv_config {
   const double result_win_ratio;
 };
 
+const struct pokemon_detector_sv_hist_classifier
+    pokemon_detector_sv_default_classifier_lobby_my_select = {
+        .range_col = {149, 811},
+        .range_row = {139, 842},
+        .hist_channel = 0,
+        .hist_bins = 30,
+        .hist_max_index = 17,
+        .hist_ratio = 0.5};
+
+const struct pokemon_detector_sv_hist_classifier
+    pokemon_detector_sv_default_classifier_lobby_opponent_select = {
+        .range_col = {1229, 1649},
+        .range_row = {227, 836},
+        .hist_channel = 0,
+        .hist_bins = 30,
+        .hist_max_index = 0,
+        .hist_ratio = 0.8};
+
+const struct pokemon_detector_sv_hist_classifier
+    pokemon_detector_sv_default_classifier_black_transition = {
+        .range_col = {400, 600},
+        .range_row = {400, 600},
+        .hist_channel = 2,
+        .hist_bins = 8,
+        .hist_max_index = 0,
+        .hist_ratio = 0.8};
+
 const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
     .opponent_col_range = {1239, 1337},
     .opponent_row_range = {{228, 326},
@@ -60,24 +87,12 @@ const struct pokemon_detector_sv_config pokemon_detector_sv_default_config = {
                                   {503, 535},
                                   {619, 651},
                                   {735, 767}},
-    .classifier_lobby_my_select = {.range_col = {149, 811},
-                                   .range_row = {139, 842},
-                                   .hist_channel = 0,
-                                   .hist_bins = 30,
-                                   .hist_max_index = 17,
-                                   .hist_ratio = 0.5},
-    .classifier_lobby_opponent_select = {.range_col = {1229, 1649},
-                                         .range_row = {227, 836},
-                                         .hist_channel = 0,
-                                         .hist_bins = 30,
-                                         .hist_max_index = 0,
-                                         .hist_ratio = 0.8},
-    .classifier_black_transition = {.range_col = {400, 600},
-                                    .range_row = {400, 600},
-                                    .hist_channel = 2,
-                                    .hist_bins = 8,
-                                    .hist_max_index = 0,
-                                    .hist_ratio = 0.8},
+    .classifier_lobby_my_select =
+        pokemon_detector_sv_default_classifier_lobby_my_select,
+    .classifier_lobby_opponent_select =
+        pokemon_detector_sv_default_classifier_lobby_opponent_select,
+    .classifier_black_transition =
+        pokemon_detector_sv_default_classifier_black_transition,
     .result_range_col = {483, 697},
     .result_range_row = {{958, 1039}},
     .result_n_bins = 16,

@@ -97,23 +97,50 @@ ExternalProject_Add(o
         )
 
 ExternalProject_Get_Property(o INSTALL_DIR)
-add_library(OpenCV::Core STATIC IMPORTED)
-set_target_properties(OpenCV::Core PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}opencv_core${CMAKE_STATIC_LIBRARY_SUFFIX})
 
-add_library(OpenCV::Features2d STATIC IMPORTED)
-set_target_properties(OpenCV::Features2d PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}opencv_features2d${CMAKE_STATIC_LIBRARY_SUFFIX})
+if(MSVC)
+    add_library(OpenCV::Core STATIC IMPORTED)
+    set_target_properties(OpenCV::Core PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/x64/vc17/staticlib/${CMAKE_STATIC_LIBRARY_PREFIX}opencv_core${CMAKE_STATIC_LIBRARY_SUFFIX})
 
-add_library(OpenCV::Imgcodecs STATIC IMPORTED)
-set_target_properties(OpenCV::Imgcodecs PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}opencv_imgcodecs${CMAKE_STATIC_LIBRARY_SUFFIX})
+    add_library(OpenCV::Features2d STATIC IMPORTED)
+    set_target_properties(OpenCV::Features2d PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/x64/vc17/staticlib/${CMAKE_STATIC_LIBRARY_PREFIX}opencv_features2d${CMAKE_STATIC_LIBRARY_SUFFIX})
 
-add_library(OpenCV::Imgproc STATIC IMPORTED)
-set_target_properties(OpenCV::Imgproc PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}opencv_imgproc${CMAKE_STATIC_LIBRARY_SUFFIX})
+    add_library(OpenCV::Imgcodecs STATIC IMPORTED)
+    set_target_properties(OpenCV::Imgcodecs PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/x64/vc17/staticlib/${CMAKE_STATIC_LIBRARY_PREFIX}opencv_imgcodecs${CMAKE_STATIC_LIBRARY_SUFFIX})
 
-add_library(OpenCV::Libpng STATIC IMPORTED)
-set_target_properties(OpenCV::Libpng PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/opencv4/3rdparty/${CMAKE_STATIC_LIBRARY_PREFIX}libpng${CMAKE_STATIC_LIBRARY_SUFFIX})
+    add_library(OpenCV::Imgproc STATIC IMPORTED)
+    set_target_properties(OpenCV::Imgproc PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/x64/vc17/staticlib/${CMAKE_STATIC_LIBRARY_PREFIX}opencv_imgproc${CMAKE_STATIC_LIBRARY_SUFFIX})
 
-add_library(OpenCV::Zlib STATIC IMPORTED)
-set_target_properties(OpenCV::Zlib PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/opencv4/3rdparty/${CMAKE_STATIC_LIBRARY_PREFIX}zlib${CMAKE_STATIC_LIBRARY_SUFFIX})
+    add_library(OpenCV::Libpng STATIC IMPORTED)
+    set_target_properties(OpenCV::Libpng PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/x64/vc17/staticlib/${CMAKE_STATIC_LIBRARY_PREFIX}libpng${CMAKE_STATIC_LIBRARY_SUFFIX})
+
+    add_library(OpenCV::Zlib STATIC IMPORTED)
+    set_target_properties(OpenCV::Zlib PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/x64/vc17/staticlib/${CMAKE_STATIC_LIBRARY_PREFIX}zlib${CMAKE_STATIC_LIBRARY_SUFFIX})
+else()
+    add_library(OpenCV::Core STATIC IMPORTED)
+    set_target_properties(OpenCV::Core PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}opencv_core${CMAKE_STATIC_LIBRARY_SUFFIX})
+
+    add_library(OpenCV::Features2d STATIC IMPORTED)
+    set_target_properties(OpenCV::Features2d PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}opencv_features2d${CMAKE_STATIC_LIBRARY_SUFFIX})
+
+    add_library(OpenCV::Imgcodecs STATIC IMPORTED)
+    set_target_properties(OpenCV::Imgcodecs PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}opencv_imgcodecs${CMAKE_STATIC_LIBRARY_SUFFIX})
+
+    add_library(OpenCV::Imgproc STATIC IMPORTED)
+    set_target_properties(OpenCV::Imgproc PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}opencv_imgproc${CMAKE_STATIC_LIBRARY_SUFFIX})
+
+    add_library(OpenCV::Libpng STATIC IMPORTED)
+    set_target_properties(OpenCV::Libpng PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/opencv4/3rdparty/${CMAKE_STATIC_LIBRARY_PREFIX}libpng${CMAKE_STATIC_LIBRARY_SUFFIX})
+
+    add_library(OpenCV::Zlib STATIC IMPORTED)
+    set_target_properties(OpenCV::Zlib PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/opencv4/3rdparty/${CMAKE_STATIC_LIBRARY_PREFIX}zlib${CMAKE_STATIC_LIBRARY_SUFFIX})
+endif()
+
+if(MSVC)
+    set(OpenCV_INCLUDE_PATH ${INSTALL_DIR}/include)
+else()
+    set(OpenCV_INCLUDE_PATH ${INSTALL_DIR}/include/opencv4)
+endif(MSVC)
 
 set_target_properties(
         OpenCV::Core
@@ -123,7 +150,7 @@ set_target_properties(
         OpenCV::Libpng
         OpenCV::Zlib
         PROPERTIES
-        INTERFACE_INCLUDE_DIRECTORIES ${INSTALL_DIR}/include/opencv4
+        INTERFACE_INCLUDE_DIRECTORIES ${OpenCV_INCLUDE_PATH}
 )
 add_library(OpenCV INTERFACE)
 target_link_libraries(OpenCV INTERFACE
