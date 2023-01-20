@@ -3,8 +3,7 @@ project(pokemon-detector-sv)
 
 include(ExternalProject)
 
-string(REPLACE ";" "$<SEMICOLON>" CMAKE_OSX_ARCHITECTURES_
-               "${CMAKE_OSX_ARCHITECTURES}")
+string(REPLACE ";" "$<SEMICOLON>" CMAKE_OSX_ARCHITECTURES_ "${CMAKE_OSX_ARCHITECTURES}")
 set(CMAKE_CXX_STANDARD 20)
 
 if(MSVC)
@@ -34,6 +33,7 @@ ExternalProject_Add(
     <INSTALL_DIR>/${OCV_LIB_PATH_3RD}/${CMAKE_STATIC_LIBRARY_PREFIX}libpng${CMAKE_STATIC_LIBRARY_SUFFIX}
     <INSTALL_DIR>/${OCV_LIB_PATH_3RD}/${CMAKE_STATIC_LIBRARY_PREFIX}zlib${CMAKE_STATIC_LIBRARY_SUFFIX}
   CMAKE_GENERATOR ${CMAKE_GENERATOR}
+  INSTALL_COMMAND cmake --install <BINARY_DIR> --config ${CMAKE_BUILD_TYPE}
   CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
              -DCMAKE_BUILD_TYPE=Release
              -DCMAKE_GENERATOR_PLATFORM=${CMAKE_GENERATOR_PLATFORM}
@@ -163,13 +163,11 @@ else()
 endif(MSVC)
 
 set_target_properties(
-  OpenCV::Core OpenCV::Features2d OpenCV::Imgcodecs OpenCV::Imgproc
-  OpenCV::Libpng OpenCV::Zlib PROPERTIES INTERFACE_INCLUDE_DIRECTORIES
-                                         ${OpenCV_INCLUDE_PATH})
+  OpenCV::Core OpenCV::Features2d OpenCV::Imgcodecs OpenCV::Imgproc OpenCV::Libpng OpenCV::Zlib
+  PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${OpenCV_INCLUDE_PATH})
 add_library(OpenCV INTERFACE)
-target_link_libraries(
-  OpenCV INTERFACE OpenCV::Features2d OpenCV::Imgcodecs OpenCV::Imgproc
-                   OpenCV::Core OpenCV::Libpng OpenCV::Zlib)
+target_link_libraries(OpenCV INTERFACE OpenCV::Features2d OpenCV::Imgcodecs OpenCV::Imgproc
+                                       OpenCV::Core OpenCV::Libpng OpenCV::Zlib)
 if(APPLE)
   target_link_libraries(OpenCV INTERFACE "-framework Accelerate")
 endif(APPLE)
@@ -185,9 +183,10 @@ install(
 
 add_dependencies(OpenCV o)
 
-add_library(pokemon-detector-sv STATIC)
+add_library(libpokemon-detector-sv STATIC)
+set_property(TARGET libpokemon-detector-sv PROPERTY POSITION_INDEPENDENT_CODE ON)
 target_sources(
-  pokemon-detector-sv
+  libpokemon-detector-sv
   PRIVATE pokemon-detector-sv.cpp
           SceneDetector.cpp
           PokemonRecognizer.cpp
@@ -198,37 +197,33 @@ target_sources(
           ResultRecognizer.cpp)
 
 install(FILES ${PROJECT_SOURCE_DIR}/pokemon-detector-sv.h TYPE INCLUDE)
-target_link_libraries(pokemon-detector-sv OpenCV)
+target_link_libraries(libpokemon-detector-sv OpenCV)
+target_include_directories(libpokemon-detector-sv PUBLIC ${PROJECT_SOURCE_DIR})
 
 add_executable(pokemon-detector-sv-exe main.cpp)
 target_link_libraries(pokemon-detector-sv-exe OpenCV)
 
-add_executable(CalculateSelectScreenHist CalculateSelectScreenHist.cpp
-                                         SceneDetector.cpp)
+add_executable(CalculateSelectScreenHist CalculateSelectScreenHist.cpp SceneDetector.cpp)
 target_link_libraries(CalculateSelectScreenHist OpenCV)
 
 add_executable(CalculatePokemonHist CalculatePokemonHist.cpp)
 target_link_libraries(CalculatePokemonHist OpenCV)
 
-add_executable(
-  PokemonRecognizerBench PokemonRecognizerBench.cpp PokemonRecognizer.cpp
-                         PokemonRecognizerGenerated.cpp)
+add_executable(PokemonRecognizerBench PokemonRecognizerBench.cpp PokemonRecognizer.cpp
+                                      PokemonRecognizerGenerated.cpp)
 target_link_libraries(PokemonRecognizerBench OpenCV)
 
 add_executable(AKAZETrainer AKAZETrainer.cpp)
 target_link_libraries(AKAZETrainer OpenCV)
 
-add_executable(EntityCropperPlayground EntityCropperPlayground.cpp
-                                       EntityCropper.cpp)
+add_executable(EntityCropperPlayground EntityCropperPlayground.cpp EntityCropper.cpp)
 target_link_libraries(EntityCropperPlayground OpenCV)
 
-add_executable(
-  SelectionRecognizerBench SelectionRecognizerBench.cpp SelectionRecognizer.cpp
-                           SelectionRecognizerGenerated.cpp)
+add_executable(SelectionRecognizerBench SelectionRecognizerBench.cpp SelectionRecognizer.cpp
+                                        SelectionRecognizerGenerated.cpp)
 target_link_libraries(SelectionRecognizerBench OpenCV)
 
-add_executable(ResultRecognizerBench ResultRecognizerBench.cpp
-                                     ResultRecognizer.cpp)
+add_executable(ResultRecognizerBench ResultRecognizerBench.cpp ResultRecognizer.cpp)
 target_link_libraries(ResultRecognizerBench OpenCV)
 
-install(TARGETS pokemon-detector-sv)
+install(TARGETS libpokemon-detector-sv)
