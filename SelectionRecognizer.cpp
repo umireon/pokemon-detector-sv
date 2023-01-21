@@ -3,7 +3,7 @@
 static constexpr int BLUE_THRESHOLD = 200;
 
 int SelectionRecognizer::recognizeSelection(const cv::Mat &imageBGR) {
-  if (imageBGR.at<cv::Vec3b>(0, 0)[0] < BLUE_THRESHOLD) return -1;
+  if (imageBGR.at<cv::Vec3b>(0, 0)[0] < BLUE_THRESHOLD) return 0;
 
   cv::Mat image;
   cv::cvtColor(imageBGR, image, cv::COLOR_BGR2GRAY);
@@ -14,8 +14,10 @@ int SelectionRecognizer::recognizeSelection(const cv::Mat &imageBGR) {
     const cv::Mat &resultImage = image & SELECTION_TEMPLATES[i];
     const auto target = cv::sum(SELECTION_TEMPLATES[i] / 255);
     const auto actual = cv::sum(resultImage / 255);
-    if (cv::abs(actual[0] - target[0]) < target[0] * 0.1) {
+    if (cv::abs(actual[0] - target[0]) < target[0] * 0.2) {
 	    return SELECTION_INDEX[i];
     }
   }
+
+  return 0;
 }
