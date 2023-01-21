@@ -1,6 +1,7 @@
 #include "SelectionRecognizer.h"
 
 static constexpr int BLUE_THRESHOLD = 200;
+#include <iostream>
 
 int SelectionRecognizer::recognizeSelection(const cv::Mat &imageBGR) {
   if (imageBGR.at<cv::Vec3b>(0, 0)[0] < BLUE_THRESHOLD) return -1;
@@ -14,8 +15,11 @@ int SelectionRecognizer::recognizeSelection(const cv::Mat &imageBGR) {
     const cv::Mat &resultImage = image & SELECTION_TEMPLATES[i];
     const auto target = cv::sum(SELECTION_TEMPLATES[i] / 255);
     const auto actual = cv::sum(resultImage / 255);
-    if (cv::abs(actual[0] - target[0]) < target[0] * 0.1) {
+    std::cout << target[0] << " " << actual[0] << " " << i << std::endl;
+    if (cv::abs(actual[0] - target[0]) < target[0] * 0.2) {
 	    return SELECTION_INDEX[i];
     }
   }
+
+  return 0;
 }
