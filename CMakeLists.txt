@@ -214,3 +214,6 @@ target_link_libraries(SelectionRecognizerBench OpenCV)
 
 add_executable(ResultRecognizerBench ResultRecognizerBench.cpp ResultRecognizer.cpp)
 target_link_libraries(ResultRecognizerBench OpenCV)
+
+add_executable(TemplateMatchTrainer TemplateMatchTrainer.cpp)
+target_link_libraries(TemplateMatchTrainer OpenCV)

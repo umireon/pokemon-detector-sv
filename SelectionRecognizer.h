@@ -10,7 +10,7 @@ public:
 
 private:
   static const std::vector<int> SELECTION_INDEX;
-  static const std::vector<cv::Mat> SELECTION_DESCRIPTORS;
+  static const std::vector<cv::Mat> SELECTION_TEMPLATES;
   static const int NORMALIZED_HEIGHT;
   static const int DESCRIPTOR_SIZE;
   static const int BINARY_THRESHOLD;
