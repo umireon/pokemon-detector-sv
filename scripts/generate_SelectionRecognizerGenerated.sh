@@ -1,16 +1,14 @@
 #!/bin/bash
 set -euo pipefail
-descriptor_size=16
-normalized_height=128
+normalized_height=32
 binary_threshold=200
-rows=$(($descriptor_size / 8))
+rows=32
 (
     printf '%s\n' '#include <vector>'
     printf '%s\n' '#include <opencv2/opencv.hpp>'
     printf '%s\n' '#include "SelectionRecognizer.h"'
-    printf '%s\n' "const int SelectionRecognizer::DESCRIPTOR_SIZE = $descriptor_size;"
-    printf '%s\n' "const int SelectionRecognizer::NORMALIZED_HEIGHT = $normalized_height;"
     printf '%s\n' "const int SelectionRecognizer::BINARY_THRESHOLD = $binary_threshold;"
+    printf '%s\n' "const int SelectionRecognizer::NORMALIZED_HEIGHT = $normalized_height;"
 
     printf '%s' 'const std::vector<int> SelectionRecognizer::SELECTION_INDEX = {'
     for name in $(basename -s .png ./train/SelectionRecognizer/*.png)
@@ -20,10 +18,10 @@ rows=$(($descriptor_size / 8))
     printf '%s\n' '};'
 
     printf '%s' 'static const std::vector<std::vector<uchar>> DATA = '
-    ./cmake-build-debug/AkAZETrainer $descriptor_size $normalized_height $binary_threshold ./train/SelectionRecognizer/*.png
+    ./cmake-build-debug/TemplateMatchTrainer $normalized_height $binary_threshold ./train/SelectionRecognizer/*.png
     printf '%s\n' ';'
 
-    printf '%s' 'const std::vector<cv::Mat> SelectionRecognizer::SELECTION_DESCRIPTORS = {'
+    printf '%s' 'const std::vector<cv::Mat> SelectionRecognizer::SELECTION_TEMPLATES = {'
     for i in $(seq 0 $(($(ls ./train/SelectionRecognizer/*.png | wc -l) - 1)))
     do
     printf '%s' "cv::Mat(DATA[$i].size()/$rows,$rows,CV_8U,(void*)DATA[$i].data()),";
